@@ -1,0 +1,7 @@
+# Ignore everything
+*
+
+# But not these:
+!.gitignore
+!*/      # Include all folders
+!*.html  # Include all .html files
