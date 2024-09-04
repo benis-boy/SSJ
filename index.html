@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index</title>
+    <title>Pokemon - Solo's Strage Journey</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,24 +12,29 @@
             margin: 0;
             padding: 0;
             color: #333;
-            overflow-x: hidden; /* Prevent horizontal scroll */
+            overflow-x: hidden;
+            /* Prevent horizontal scroll */
         }
+
         #book {
             display: flex;
-            max-width: 1200px;
+            max-width: 100vw;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0;
             background: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            position: relative; /* For positioning the toggle button */
+            position: relative;
+            /* For positioning the toggle button */
         }
+
         #navigation {
             width: 250px;
             padding: 20px;
             border-right: 2px solid #3498db;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
             background-color: #fff;
-            height: calc(100vh - 40px);
+            height: 100vh;
+            margin-top: 0px;
             overflow-y: auto;
             position: fixed;
             left: 0;
@@ -36,17 +42,21 @@
             transform: translateX(-100%);
             transition: transform 0.3s ease;
         }
+
         #navigation.show {
             transform: translateX(0);
         }
+
         #navigation ul {
             list-style-type: none;
             padding: 0;
             margin: 0;
         }
+
         #navigation li {
             margin: 10px 0;
         }
+
         #navigation a {
             text-decoration: none;
             color: #3498db;
@@ -55,39 +65,78 @@
             border-radius: 5px;
             transition: background-color 0.3s ease;
         }
+
         #navigation a:hover {
             background-color: #ecf0f1;
         }
+
         #content {
             flex: 1;
-            padding: 20px;
+            padding: 40px;
             background-color: #fff;
             min-height: calc(100vh - 40px);
             overflow-y: auto;
-            margin-left: 250px; /* Adjust based on the width of the navigation */
+            margin-left: 260px;
+            /* Adjust based on the width of the navigation */
             transition: margin-left 0.3s ease;
         }
+
         #content.shift {
             margin-left: 0;
         }
+
         #toggleNav {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 24px;
-            cursor: pointer;
+            top: 8px;
+            left: 15px;
             background: #3498db;
             color: #fff;
             border: none;
             border-radius: 5px;
-            padding: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+            z-index: 10;
+            /* Make sure it's above other content */
         }
+
+        #toggleNav.float {
+            position: fixed;
+        }
+
+        /* Hide the toggleNav button on mobile devices */
+        @media (max-width: 768px) {
+            #toggleNav {
+                display: none;
+            }
+        }
+
+        .highlight {
+            background-color: #bbdfff;
+            /* Light blue background for highlighting */
+            border-radius: 5px;
+        }
+
         #bookTitle {
             text-align: center;
             color: #2c3e50;
             margin-bottom: 20px;
         }
     </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('#navigation a').forEach(function (link) {
+                link.addEventListener('click', function (event) {
+                    const listItem = this.closest('li'); // Get the closest <li> element
+                    // Clear previous highlights
+                    document.querySelectorAll('#navigation li').forEach(function (li) {
+                        li.classList.remove('highlight');
+                    });
+                    // Highlight the clicked <li>
+                    listItem.classList.add('highlight');
+                });
+            });
+        });
+    </script>
     <script>
         function loadContent(url) {
             fetch(url)
@@ -99,10 +148,11 @@
         }
     </script>
 </head>
+
 <body>
     <div id="book">
-        <button id="toggleNav">☰</button>
-        <ul id="navigation">
+        <button id="toggleNav" class="float">☰</button>
+        <ul id="navigation" class="show">
             <h1 id="bookTitle">Pokemon - Solo's Strange Journey</h1>
             <!-- Links to HTML files will be inserted here -->
         <li><ul>
@@ -181,9 +231,127 @@
         </ul></li>
         <!-- End of links section -->
         </ul>
-        <div id="content">
-            <!-- Content of the HTML files will be loaded here -->
+        <div id="content" class="">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus
+                ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent
+                mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class
+                aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales
+                ligula in libero. </p>
+
+            <p>Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at
+                dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi
+                lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia
+                aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh. Quisque
+                volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per
+                inceptos himenaeos. </p>
+
+            <p>Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante
+                quis turpis. Nulla facilisi. Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat
+                imperdiet. Vestibulum sapien. Proin quam. Etiam ultrices. Suspendisse in justo eu magna luctus suscipit.
+                Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa
+                mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et
+                ultrices posuere cubilia Curae; Morbi lacinia molestie dui. </p>
+
+            <p>Praesent blandit dolor. Sed non quam. In vel mi sit amet augue congue elementum. Morbi in ipsum sit amet
+                pede facilisis laoreet. Donec lacus nunc, viverra nec, blandit vel, egestas et, augue. Vestibulum
+                tincidunt malesuada tellus. Ut ultrices ultrices enim. Curabitur sit amet mauris. Morbi in dui quis est
+                pulvinar ullamcorper. Nulla facilisi. Integer lacinia sollicitudin massa. Cras metus. </p>
+
+            <p>Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim
+                in, ultrices sit amet, augue. Proin sodales libero eget ante. Nulla quam. Aenean laoreet. Vestibulum
+                nisi lectus, commodo ac, facilisis ac, ultricies eu, pede. Ut orci risus, accumsan porttitor, cursus
+                quis, aliquet eget, justo. Sed pretium blandit orci. Ut eu diam at pede suscipit sodales. </p>
+
+            <p>Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at
+                dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi
+                lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia
+                aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh. Quisque
+                volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per
+                inceptos himenaeos. </p>
+
+            <p>Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante
+                quis turpis. Nulla facilisi. Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat
+                imperdiet. Vestibulum sapien. Proin quam. Etiam ultrices. Suspendisse in justo eu magna luctus suscipit.
+                Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa
+                mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et
+                ultrices posuere cubilia Curae; Morbi lacinia molestie dui. </p>
+
+            <p>Praesent blandit dolor. Sed non quam. In vel mi sit amet augue congue elementum. Morbi in ipsum sit amet
+                pede facilisis laoreet. Donec lacus nunc, viverra nec, blandit vel, egestas et, augue. Vestibulum
+                tincidunt malesuada tellus. Ut ultrices ultrices enim. Curabitur sit amet mauris. Morbi in dui quis est
+                pulvinar ullamcorper. Nulla facilisi. Integer lacinia sollicitudin massa. Cras metus. </p>
+
+            <p>Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim
+                in, ultrices sit amet, augue. Proin sodales libero eget ante. Nulla quam. Aenean laoreet. Vestibulum
+                nisi lectus, commodo ac, facilisis ac, ultricies eu, pede. Ut orci risus, accumsan porttitor, cursus
+                quis, aliquet eget, justo. Sed pretium blandit orci. Ut eu diam at pede suscipit sodales. </p>
+
+            <p>Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at
+                dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi
+                lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia
+                aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh. Quisque
+                volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per
+                inceptos himenaeos. </p>
+
+            <p>Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante
+                quis turpis. Nulla facilisi. Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat
+                imperdiet. Vestibulum sapien. Proin quam. Etiam ultrices. Suspendisse in justo eu magna luctus suscipit.
+                Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa
+                mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et
+                ultrices posuere cubilia Curae; Morbi lacinia molestie dui. </p>
+
+            <p>Praesent blandit dolor. Sed non quam. In vel mi sit amet augue congue elementum. Morbi in ipsum sit amet
+                pede facilisis laoreet. Donec lacus nunc, viverra nec, blandit vel, egestas et, augue. Vestibulum
+                tincidunt malesuada tellus. Ut ultrices ultrices enim. Curabitur sit amet mauris. Morbi in dui quis est
+                pulvinar ullamcorper. Nulla facilisi. Integer lacinia sollicitudin massa. Cras metus. </p>
+
+            <p>Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim
+                in, ultrices sit amet, augue. Proin sodales libero eget ante. Nulla quam. Aenean laoreet. Vestibulum
+                nisi lectus, commodo ac, facilisis ac, ultricies eu, pede. Ut orci risus, accumsan porttitor, cursus
+                quis, aliquet eget, justo. Sed pretium blandit orci. Ut eu diam at pede suscipit sodales. </p>
+
+
         </div>
     </div>
+    <script>
+        // Function to handle swipe gestures
+        let startX;
+
+        document.addEventListener('touchstart', function (e) {
+            startX = e.touches[0].clientX;
+        });
+
+        document.addEventListener('touchend', function (e) {
+            let endX = e.changedTouches[0].clientX;
+            const nav = document.getElementById('navigation');
+            const content = document.getElementById('content');
+            if (startX - endX > 50) {
+                // Swipe left
+                nav.classList.remove('show');
+                content.classList.add('shift');
+            } else if (endX - startX > 50) {
+                // Swipe right
+                nav.classList.add('show');
+                content.classList.remove('shift');
+            }
+        });
+
+        // Toggle navigation visibility
+        document.getElementById('toggleNav').addEventListener('click', function () {
+            const nav = document.getElementById('navigation');
+            const content = document.getElementById('content');
+            const btn = document.getElementById('toggleNav');
+            if (nav.classList.contains('show')) {
+                nav.classList.remove('show');
+                content.classList.add('shift');
+                btn.classList.remove('float');
+            } else {
+                nav.classList.add('show');
+                content.classList.remove('shift');
+                btn.classList.add('float');
+            }
+        });
+    </script>
 </body>
+
 </html>
