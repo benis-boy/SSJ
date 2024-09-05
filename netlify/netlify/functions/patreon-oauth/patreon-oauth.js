@@ -24,13 +24,13 @@ exports.handler = async (event, context) => {
   }
 
   // Extract the authorization code from the request body
-  const { code } = JSON.parse(event.body);
+  const { code, refresh_token } = JSON.parse(event.body);
 
-  if (!code) {
+  if (!code && !refresh_token) {
     return {
       statusCode: 400,
       headers,
-      body: 'Authorization code is required',
+      body: 'Authorization code or refresh_token is required',
     };
   }
 
@@ -41,17 +41,32 @@ exports.handler = async (event, context) => {
 
   try {
     // Send a POST request to exchange the authorization code for an access token
-    const response = await fetch(token_url + new URLSearchParams({
-      code,
-      grant_type: 'authorization_code',
-      client_id,
-      redirect_uri,
-    }).toString(), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    });
+    let response = null;
+    if (code) {
+      response = await fetch(token_url + new URLSearchParams({
+        code,
+        grant_type: 'authorization_code',
+        client_id,
+        redirect_uri,
+      }).toString(), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
+    } else if (refresh_token) {
+      response = await fetch(token_url + new URLSearchParams({
+        grant_type: 'refresh_token',
+        client_id,
+        refresh_token,
+        redirect_uri, // This may not be needed depending on the provider
+      }).toString(), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
+    }
 
     const token = await response.json();
 

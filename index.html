@@ -460,7 +460,7 @@
             }
             if (!token.userInfo?.supportsMe) {
                 window.SUPPORTER = false;
-                document.getElementById('content').innerHTML = "Not a supporter."
+                document.getElementById('content').innerHTML = "<p>Not a supporter.</p>"
             } else {
                 window.SUPPORTER = true;
             }
@@ -487,7 +487,7 @@
         });
 
         // Simulate getting the username from the OAuth process (this should be handled server-side)
-        async function handlePatreonAuth(authCode) {
+        async function handlePatreonAuth(auth) {
             const url = new URL(window.location);
             url.searchParams.delete('code');
             window.history.replaceState({}, document.title, url.toString());
@@ -496,7 +496,7 @@
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ code: authCode }),
+                body: JSON.stringify(auth),
             })
                 .then(response => response.json())
                 .then(data => {
@@ -518,7 +518,7 @@
         const urlParams = new URLSearchParams(window.location.search);
         const authCode = urlParams.get('code');
         if (authCode) {
-            handlePatreonAuth(authCode);
+            handlePatreonAuth({ code: authCode });
         }
 
         // Check Patreon authentication status on page load
@@ -527,7 +527,7 @@
         window.addEventListener("load", function () {
             // Your function to execute once the document and resources are fully loaded
             if (_token) {
-                handlePatreonAuth(_token.access_token);
+                handlePatreonAuth({ refresh_token: _token.refresh_token });
             }
         });
     </script>
