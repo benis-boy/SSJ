@@ -476,7 +476,7 @@
             const tokenEndpoint = 'https://www.patreon.com/api/oauth2/token?';
             const params = new URLSearchParams({
                 code: authCode,
-                grant_type: 'authorization_code',
+                grant_type: 'code',
                 client_id: CLIENT_ID,
                 redirect_uri: REDIRECT_URI
             });
