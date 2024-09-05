@@ -77,11 +77,11 @@ exports.handler = async (event, context) => {
 
       const userName = userInfo.data.attributes.vanity ?? token.userInfo.data.attributes.full_name;
       const memberData = userInfo.included.filter(something => something.type === "member");
-      const myMemberData = memberData.find(memberInfo => memberInfo?.relationships?.campaign?.data?.id === "12346885" || memberInfo?.relationships?.campaign?.data?.id === "265117");
+      const myMemberData = memberData.find(memberInfo => memberInfo?.relationships?.campaign?.data?.id === "12346885");
       const filteredMembershipData = {
         userName,
-        supportsMe: myMemberData.attributes?.patron_status === "active_patron",
-        currently_entitled_tiers: myMemberData.relationships?.currently_entitled_tiers,
+        supportsMe: myMemberData?.attributes?.patron_status === "active_patron",
+        currently_entitled_tiers: myMemberData?.relationships?.currently_entitled_tiers,
       }
 
       // Return the access token to the frontend
