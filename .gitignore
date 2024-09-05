@@ -2,3 +2,6 @@
 *.md
 *.bat
 *.py
+
+# Local Netlify folder
+.netlify/*
