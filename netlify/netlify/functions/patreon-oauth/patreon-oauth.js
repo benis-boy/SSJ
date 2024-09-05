@@ -56,24 +56,12 @@ exports.handler = async (event, context) => {
     const data = await response.json();
 
     if (response.ok) {
-      // Fetch user info from Patreon API using the access token
-      const userDataResponse = await fetch('https://www.patreon.com/api/oauth2/v2/identity', {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${data.accessToken}`,
-          'Content-Type': 'application/json'
-        }
-      })
-      if (!userDataResponse.ok) {
-        throw new Error('Failed to fetch user info from Patreon');
-      }
-      const userInfo = await response.json();
 
       // Return the access token to the frontend
       return {
         statusCode: 200,
         headers,
-        body: JSON.stringify({ ...data, user: userInfo }),
+        body: JSON.stringify({ ...data }),
       };
     } else {
       // Handle errors from Patreon API
