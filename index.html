@@ -532,7 +532,7 @@
                     }
                 })
                 .catch(error => {
-                    localStorage.removeItem('patreon_token');
+                    localStorage.setItem('patreon_token', JSON.stringify({ ..._token, userInfo: { ..._token?.userInfo, supportsMe: false } }));
                     checkPatreonAuthentication();
                     console.error('Error:', error)
                 });
