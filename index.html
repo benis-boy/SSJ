@@ -527,7 +527,11 @@
                         console.error('Error:', data);
                     }
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => {
+                    localStorage.removeItem('patreon_token');
+                    checkPatreonAuthentication();
+                    console.error('Error:', error)
+                });
         }
 
         // Check if there is an auth code in the URL (for OAuth)
