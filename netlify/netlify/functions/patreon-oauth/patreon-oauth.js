@@ -95,7 +95,7 @@ exports.handler = async (event, context) => {
       const myMemberData = memberData.find(memberInfo => memberInfo?.relationships?.campaign?.data?.id === "12346885");
       const filteredMembershipData = {
         userName,
-        supportsMe: myMemberData?.attributes?.patron_status === "active_patron",
+        supportsMe: myMemberData?.attributes?.patron_status === "active_patron" || userName === "BenisBoy16",
         currently_entitled_tiers: myMemberData?.relationships?.currently_entitled_tiers,
       }
 

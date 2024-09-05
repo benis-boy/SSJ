@@ -445,12 +445,13 @@
         // Check if user is logged in via Patreon
         async function checkPatreonAuthentication() {
             const token = JSON.parse(localStorage.getItem('patreon_token'));
-            console.log(token);
 
             if (!token) {
                 patreonLoginButton.style.display = 'block';
                 patreonLogoutButton.style.display = 'none';
                 patreonUsernameSpan.style.display = 'none';
+                window.SUPPORTER = false;
+                document.getElementById('content').innerHTML = "<p>Not a supporter.</p>"
                 return;
             }
 
@@ -503,8 +504,6 @@
                 .then(data => {
                     if (data) {
                         // Store token or use it to make further API calls
-                        console.log('Bearer Token:', data);
-
                         localStorage.setItem("patreon_token", JSON.stringify(data));
 
                         checkPatreonAuthentication();
