@@ -451,7 +451,7 @@
                 return;
             }
 
-            const username = token.userInfo?.data.attributes.full_name;
+            const username = token.userInfo?.userName;
             if (username) {
                 showPatreonUser(username);
             }

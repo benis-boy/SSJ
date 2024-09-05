@@ -59,7 +59,7 @@ exports.handler = async (event, context) => {
 
       const userFetchUrl = 'https://www.patreon.com/api/oauth2/v2/identity?' + new URLSearchParams({
         "include": "memberships.currently_entitled_tiers,memberships.campaign",
-        "fields[user]": "full_name",
+        "fields[user]": "full_name,vanity",
         "fields[member]": "currently_entitled_amount_cents,lifetime_support_cents,patron_status,pledge_cadence"
       }).toString()
 
@@ -75,11 +75,20 @@ exports.handler = async (event, context) => {
       }
       const userInfo = await userDataResponse.json();
 
+      const userName = userInfo.data.attributes.vanity ?? token.userInfo.data.attributes.full_name;
+      const memberData = userInfo.included.filter(something => something.type === "member");
+      const myMemberData = memberData.find(memberInfo => memberInfo?.relationships?.campaign?.data?.id === "12346885" || memberInfo?.relationships?.campaign?.data?.id === "265117");
+      const filteredMembershipData = {
+        userName,
+        supportsMe: myMemberData.attributes?.patron_status === "active_patron",
+        currently_entitled_tiers: myMemberData.relationships?.currently_entitled_tiers,
+      }
+
       // Return the access token to the frontend
       return {
         statusCode: 200,
         headers,
-        body: JSON.stringify({ ...token, userInfo: userInfo }),
+        body: JSON.stringify({ ...token, userInfo: filteredMembershipData }),
       };
     } else {
       // Handle errors from Patreon API
