@@ -35,25 +35,22 @@ exports.handler = async (event, context) => {
   }
 
   const client_id = 'DCmpYjAt5oF-1poN2N_hW22VXTuz8BNIOPk1yeoctffuvobAJCu8I7N7fKc1ngMp';
-  const client_secret = 'YOUR_CLIENT_SECRET';
   const redirect_uri = 'https://benis-boy.github.io/SSJ/'; // Make sure this matches the one registered in Patreon
 
-  const token_url = 'https://www.patreon.com/api/oauth2/token';
+  const token_url = 'https://www.patreon.com/api/oauth2/token?';
 
   try {
     // Send a POST request to exchange the authorization code for an access token
-    const response = await fetch(token_url, {
+    const response = await fetch(token_url + new URLSearchParams({
+      code,
+      grant_type: 'authorization_code',
+      client_id,
+      redirect_uri,
+    }).toString(), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: new URLSearchParams({
-        code,
-        grant_type: 'authorization_code',
-        client_id,
-        client_secret,
-        redirect_uri,
-      }).toString(),
     });
 
     const data = await response.json();
