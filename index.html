@@ -440,7 +440,7 @@
 
         // Check if user is logged in via Patreon
         async function checkPatreonAuthentication() {
-            const token = localStorage.getItem('patreon_token');
+            const token = JSON.parse(localStorage.getItem('patreon_token'));
             console.log(token);
 
             if (!token) {
@@ -513,7 +513,7 @@
                         // Store token or use it to make further API calls
                         console.log('Bearer Token:', data);
 
-                        localStorage.setItem("patreon_token", data);
+                        localStorage.setItem("patreon_token", JSON.stringify(token));
 
                         checkPatreonAuthentication();
                     } else {
