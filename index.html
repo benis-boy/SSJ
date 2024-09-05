@@ -242,6 +242,7 @@
     <script>
         function loadContent(url) {
             if (!window.SUPPORTER) return;
+            window.SELECTED_CHAPTER = true;
             fetch(url)
                 .then(response => response.text())
                 .then(data => {
@@ -399,7 +400,7 @@
         });
 
         window.addEventListener('touchmove', (e) => {
-            if (!window.SUPPORTER) return;
+            if (!window.SUPPORTER || !window.SELECTED_CHAPTER) return;
             let moveY = e.touches[0].clientY;
             let diffY = startY - moveY;
 
@@ -432,7 +433,7 @@
 
         // Detect scroll events
         window.addEventListener('scroll', () => {
-            if (!window.SUPPORTER) return;
+            if (!window.SUPPORTER || !window.SELECTED_CHAPTER) return;
             let currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
             if (currentScrollTop > lastScrollTop && !isHeaderHidden) {
