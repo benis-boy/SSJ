@@ -60,7 +60,7 @@ exports.handler = async (event, context) => {
       const userDataResponse = await fetch('https://www.patreon.com/api/oauth2/v2/identity?' + new URLSearchParams({
         "include": "memberships",
         "fields[user]": "full_name",
-        "fields[member]": "currently_entitled_amount_cents,lifetime_support_cents,patron_status"
+        "fields[member]": "currently_entitled_tiers,currently_entitled_amount_cents,lifetime_support_cents,patron_status"
       }), {
         method: 'GET',
         headers: {

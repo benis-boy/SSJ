@@ -433,7 +433,7 @@
     <script>
         const CLIENT_ID = 'DCmpYjAt5oF-1poN2N_hW22VXTuz8BNIOPk1yeoctffuvobAJCu8I7N7fKc1ngMp';
         const REDIRECT_URI = "https://benis-boy.github.io/SSJ/";  // Adjust as needed
-        const SCOPE = 'identity identity.members';
+        const SCOPE = '&scope=identity?include=memberships,memberships.currently_entitled_tiers,memberships.currently_entitled_amount_cents,memberships.lifetime_support_cents,memberships.patron_status';
         const PATREON_OAUTH_URL = `https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=${encodeURIComponent(SCOPE)}`;
         const patreonLoginButton = document.getElementById('patreon-login');
         const patreonLogoutButton = document.getElementById('patreon-logout');
