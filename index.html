@@ -472,6 +472,9 @@
 
         // Simulate getting the username from the OAuth process (this should be handled server-side)
         async function handlePatreonAuth(authCode) {
+            const url = new URL(window.location);
+            url.searchParams.delete('code');
+            window.history.replaceState({}, document.title, url.toString());
             fetch('https://mellow-kitsune-6578b2.netlify.app/.netlify/functions/patreon-oauth', {
                 method: 'POST',
                 headers: {
@@ -486,10 +489,6 @@
                         console.log('Bearer Token:', data);
 
                         localStorage.setItem("patreon_token", data);
-
-                        const url = new URL(window.location);
-                        url.searchParams.delete('code');
-                        window.history.replaceState({}, document.title, url.toString());
 
                         checkPatreonAuthentication();
                     } else {

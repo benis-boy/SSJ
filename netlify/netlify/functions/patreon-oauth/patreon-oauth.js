@@ -63,7 +63,7 @@ exports.handler = async (event, context) => {
           'Authorization': `Bearer ${data.accessToken}`,
           'Content-Type': 'application/json'
         }
-      });
+      })
       if (!userDataResponse.ok) {
         throw new Error('Failed to fetch user info from Patreon');
       }
@@ -88,7 +88,7 @@ exports.handler = async (event, context) => {
     return {
       statusCode: 500,
       headers,
-      body: 'Error fetching token from Patreon',
+      body: 'Error fetching token from Patreon: ' + error.message,
     };
   }
 };
