@@ -74,10 +74,12 @@
         #content {
             flex: 1;
             padding: 40px;
+            padding-top: 10px;
             background-color: #fff;
             min-height: calc(100vh - 40px);
             overflow-y: auto;
             margin-left: 280px;
+            margin-top: var(--header-height);
             /* Adjust based on the width of the navigation */
             transition: margin-left 0.3s ease;
         }
@@ -94,7 +96,7 @@
 
             #content {
                 margin-left: 0;
-                padding-top: calc(var(--header-height) - 40px);
+                padding-top: 10px;
                 padding-left: 10px;
                 padding-right: 10px;
             }
@@ -476,7 +478,9 @@
                 document.getElementById('content').innerHTML = "<p>Not a supporter.</p>"
             } else {
                 window.SUPPORTER = true;
-                document.getElementById('content').innerHTML = "<p>Select a chapter.</p>"
+                if (document.getElementById('content').innerHTML === "<p>Not a supporter.</p>") {
+                    document.getElementById('content').innerHTML = "<p>Select a chapter.</p>"
+                }
             }
         }
 
