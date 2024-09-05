@@ -53,22 +53,39 @@ exports.handler = async (event, context) => {
       },
     });
 
-    const data = await response.json();
+    const token = await response.json();
 
     if (response.ok) {
+
+      const userDataResponse = await fetch('https://www.patreon.com/api/oauth2/v2/identity?' + new URLSearchParams({
+        "include": "memberships",
+        "fields[user]": "full_name",
+        "fields[member]": "currently_entitled_amount_cents,lifetime_support_cents,patron_status"
+      }), {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token.accessToken}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      if (!userDataResponse.ok) {
+        throw new Error('Failed to fetch user info from Patreon: ' + await userDataResponse.text());
+      }
+      const userInfo = await response.json();
+      console.log(userInfo);
 
       // Return the access token to the frontend
       return {
         statusCode: 200,
         headers,
-        body: JSON.stringify({ ...data }),
+        body: JSON.stringify(token),
       };
     } else {
       // Handle errors from Patreon API
       return {
         statusCode: response.status,
         headers,
-        body: JSON.stringify(data),
+        body: JSON.stringify(token),
       };
     }
   } catch (error) {
