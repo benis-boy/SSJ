@@ -57,28 +57,29 @@ exports.handler = async (event, context) => {
 
     if (response.ok) {
 
-      const userDataResponse = await fetch('https://www.patreon.com/api/oauth2/v2/identity?' + new URLSearchParams({
-        "include": "memberships",
+      const userFetchUrl = 'https://www.patreon.com/api/oauth2/v2/identity?' + new URLSearchParams({
+        "include": "memberships.currently_entitled_tiers,memberships.campaign",
         "fields[user]": "full_name",
-        "fields[memberships]": "currently_entitled_tiers,currently_entitled_amount_cents,lifetime_support_cents,patron_status"
-      }.toString()), {
+        "fields[member]": "currently_entitled_amount_cents,lifetime_support_cents,patron_status,pledge_cadence"
+      }).toString()
+
+      const userDataResponse = await fetch(userFetchUrl, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${token.accessToken}`,
+          'Authorization': `Bearer ${token.access_token}`,
           'Content-Type': 'application/json'
         }
       })
       if (!userDataResponse.ok) {
         throw new Error('Failed to fetch user info from Patreon: ' + await userDataResponse.text());
       }
-      const userInfo = await response.json();
-      console.log(userInfo);
+      const userInfo = await userDataResponse.json();
 
       // Return the access token to the frontend
       return {
         statusCode: 200,
         headers,
-        body: JSON.stringify(token),
+        body: JSON.stringify({ ...token, userInfo: userInfo }),
       };
     } else {
       // Handle errors from Patreon API

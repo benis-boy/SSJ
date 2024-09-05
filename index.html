@@ -451,12 +451,9 @@
                 return;
             }
 
+            const username = token.userInfo?.data.attributes.full_name;
             if (username) {
                 showPatreonUser(token.access_token);
-            } else {
-                patreonLoginButton.style.display = 'block';
-                patreonLogoutButton.style.display = 'none';
-                patreonUsernameSpan.style.display = 'none';
             }
         }
 
