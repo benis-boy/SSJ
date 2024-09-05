@@ -463,6 +463,10 @@
 
         patreonLogoutButton.addEventListener('click', function () {
             localStorage.removeItem('patreon_username');
+            // Clear the search parameters in the URL
+            const url = new URL(window.location);
+            url.search = ''; // Remove the search parameters
+            window.history.replaceState({}, document.title, url);
             checkPatreonAuthentication(); // Recheck and update UI
         });
 
