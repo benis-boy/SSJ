@@ -76,7 +76,7 @@
             padding: 40px;
             padding-top: 10px;
             background-color: #fff;
-            min-height: calc(100vh - 40px);
+            min-height: calc(100vh - 50px - var(--header-height));
             overflow-y: auto;
             margin-left: 280px;
             margin-top: var(--header-height);
@@ -174,13 +174,14 @@
         .header-hidden #navigation {
             top: 0;
             /* Adjusts navigator to top */
-            height: 100%;
+            height: calc(100vh - 40px);
             /* Expands navigator to full height */
         }
 
         .header-hidden #content {
             margin-top: 0;
             /* Moves content to the top */
+            min-height: calc(100vh - 50px);
         }
 
         #toggleNav {
@@ -350,11 +351,11 @@
             let endX = e.changedTouches[0].clientX;
             const nav = document.getElementById('navigation');
             const content = document.getElementById('content');
-            if (startX - endX > 50) {
+            if (startX - endX > 100) {
                 // Swipe left
                 nav.classList.remove('show');
                 content.classList.add('shift');
-            } else if (endX - startX > 50) {
+            } else if (endX - startX > 100) {
                 // Swipe right
                 nav.classList.add('show');
                 content.classList.remove('shift');
@@ -398,6 +399,7 @@
         });
 
         window.addEventListener('touchmove', (e) => {
+            if (!window.SUPPORTER) return;
             let moveY = e.touches[0].clientY;
             let diffY = startY - moveY;
 
@@ -430,6 +432,7 @@
 
         // Detect scroll events
         window.addEventListener('scroll', () => {
+            if (!window.SUPPORTER) return;
             let currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
             if (currentScrollTop > lastScrollTop && !isHeaderHidden) {
