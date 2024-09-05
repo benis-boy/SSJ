@@ -453,7 +453,7 @@
 
             const username = token.userInfo?.data.attributes.full_name;
             if (username) {
-                showPatreonUser(token.access_token);
+                showPatreonUser(username);
             }
         }
 
