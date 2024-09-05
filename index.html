@@ -513,7 +513,7 @@
                         // Store token or use it to make further API calls
                         console.log('Bearer Token:', data);
 
-                        localStorage.setItem("patreon_token", JSON.stringify(token));
+                        localStorage.setItem("patreon_token", JSON.stringify(data));
 
                         checkPatreonAuthentication();
                     } else {
