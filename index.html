@@ -513,6 +513,7 @@
         async function handlePatreonAuth(auth) {
             const url = new URL(window.location);
             url.searchParams.delete('code');
+            url.searchParams.delete('state');
             window.history.replaceState({}, document.title, url.toString());
             fetch('https://mellow-kitsune-6578b2.netlify.app/.netlify/functions/patreon-oauth', {
                 method: 'POST',
