@@ -440,7 +440,7 @@
 
         // Check if user is logged in via Patreon
         function checkPatreonAuthentication() {
-            const username = localStorage.getItem('patreon_username');
+            const username = localStorage.getItem('patreon_token');
             if (username) {
                 showPatreonUser(username);
             } else {
@@ -462,7 +462,7 @@
         });
 
         patreonLogoutButton.addEventListener('click', function () {
-            localStorage.removeItem('patreon_username');
+            localStorage.removeItem('patreon_token');
             // Clear the search parameters in the URL
             const url = new URL(window.location);
             url.searchParams.delete('code');
@@ -485,9 +485,10 @@
                         // Store token or use it to make further API calls
                         console.log('Bearer Token:', data.token);
 
+                        localStorage.setItem("patreon_token", data.token);
+
                         const url = new URL(window.location);
                         url.searchParams.delete('code');
-                        url.searchParams.set("token", data.token)
                         window.history.replaceState({}, document.title, url.toString());
                     } else {
                         console.error('Error:', data);
