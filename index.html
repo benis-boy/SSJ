@@ -472,7 +472,7 @@
 
         // Simulate getting the username from the OAuth process (this should be handled server-side)
         async function handlePatreonAuth(authCode) {
-            fetch('https://app.netlify.com/sites/mellow-kitsune-6578b2/logs/functions/patreon-oauth', {
+            fetch('https://mellow-kitsune-6578b2.netlify.app/.netlify/functions/patreon-oauth', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
