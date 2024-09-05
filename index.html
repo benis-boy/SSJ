@@ -509,7 +509,7 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.token) {
+                    if (data) {
                         // Store token or use it to make further API calls
                         console.log('Bearer Token:', data);
 
