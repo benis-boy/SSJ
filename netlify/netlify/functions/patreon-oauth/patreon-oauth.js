@@ -60,7 +60,7 @@ exports.handler = async (event, context) => {
       return {
         statusCode: 200,
         headers,
-        body: JSON.stringify({ token: data.access_token }),
+        body: JSON.stringify(data),
       };
     } else {
       // Handle errors from Patreon API
