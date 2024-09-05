@@ -504,7 +504,6 @@
             localStorage.removeItem('patreon_token');
             // Clear the search parameters in the URL
             const url = new URL(window.location);
-            url.searchParams.delete('code');
             window.history.replaceState({}, document.title, url.toString());
             checkPatreonAuthentication(); // Recheck and update UI
         });
