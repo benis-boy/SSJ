@@ -526,7 +526,7 @@
 
         window.addEventListener("load", function () {
             // Your function to execute once the document and resources are fully loaded
-            if (_token) {
+            if (_token?.refresh_token) {
                 handlePatreonAuth({ refresh_token: _token.refresh_token });
             }
         });
