@@ -472,42 +472,23 @@
 
         // Simulate getting the username from the OAuth process (this should be handled server-side)
         async function handlePatreonAuth(authCode) {
-            // Simulate retrieving username from the OAuth process
-            const tokenEndpoint = 'https://www.patreon.com/api/oauth2/token?';
-            const params = new URLSearchParams({
-                code: authCode,
-                grant_type: 'authorization_code',
-                client_id: CLIENT_ID,
-                redirect_uri: REDIRECT_URI
-            });
-
-            try {
-                const response = await fetch(tokenEndpoint + params.toString(), {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
+            fetch('https://app.netlify.com/sites/mellow-kitsune-6578b2/logs/functions/patreon-oauth', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ code: authCode }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.token) {
+                        // Store token or use it to make further API calls
+                        console.log('Bearer Token:', data.token);
+                    } else {
+                        console.error('Error:', data);
                     }
-                });
-
-                if (response.ok) {
-                    const tokenData = await response.json();
-                    console.log(tokenData); // This contains the access_token and other info
-
-                    // Now you would use the access_token to make a request for user info
-                    const userData = await fetchPatreonUser(tokenData.access_token);
-
-                    // Save the username in localStorage
-                    const username = userData.data.attributes.full_name;
-                    localStorage.setItem('patreon_username', username);
-
-                    // Display the Patreon username
-                    showPatreonUser(username);
-                } else {
-                    console.error('Failed to fetch token:', response.statusText);
-                }
-            } catch (error) {
-                console.error('Error during Patreon OAuth:', error);
-            }
+                })
+                .catch(error => console.error('Error:', error));
         }
 
         // Check if there is an auth code in the URL (for OAuth)
