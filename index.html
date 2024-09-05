@@ -473,7 +473,7 @@
         // Simulate getting the username from the OAuth process (this should be handled server-side)
         async function handlePatreonAuth(authCode) {
             // Simulate retrieving username from the OAuth process
-            const tokenEndpoint = 'https://cors-anywhere.herokuapp.com/https://www.patreon.com/api/oauth2/token?';
+            const tokenEndpoint = 'https://www.patreon.com/api/oauth2/token?';
             const params = new URLSearchParams({
                 code: authCode,
                 grant_type: 'authorization_code',
@@ -486,6 +486,7 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
+                        "Access-Control-Allow-Origin": "*"
                     }
                 });
 
