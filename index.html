@@ -33,14 +33,14 @@
             border-right: 2px solid #3498db;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
             background-color: #fff;
-            height: calc(100vh - 40px);
+            height: calc(100vh - 40px - 50px);
             margin-top: 0px;
             overflow-y: auto;
             position: fixed;
             left: 0;
-            top: 0;
+            top: 50px;
             transform: translateX(-100%);
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, top 0.3s ease;
         }
 
         #navigation.show {
@@ -86,24 +86,6 @@
             margin-left: 0;
         }
 
-        #toggleNav {
-            position: absolute;
-            top: 8px;
-            left: 15px;
-            background: #3498db;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            cursor: pointer;
-            z-index: 10;
-            /* Make sure it's above other content */
-        }
-
-        #toggleNav.float {
-            position: fixed;
-        }
-
         /* Hide the toggleNav button on mobile devices */
         @media (max-width: 768px) {
             #toggleNav {
@@ -126,19 +108,104 @@
 
         /* Styles for paragraphs inside the content area */
         #content p {
-            margin: 1em 0; /* Adds space above and below paragraphs */
-            line-height: 1.6; /* Increases line spacing for readability */
-            font-size: 1.1em; /* Slightly larger font size for better readability */
-            color: #333; /* Dark gray color for text */
-            font-family: Arial, sans-serif; /* Sets a clean, sans-serif font */
-            text-align: justify; /* Justifies text alignment for a cleaner look */
-            padding: 0 10px; /* Adds padding inside the paragraph for better text placement */
+            margin: 1em 0;
+            /* Adds space above and below paragraphs */
+            line-height: 1.6;
+            /* Increases line spacing for readability */
+            font-size: 1.1em;
+            /* Slightly larger font size for better readability */
+            color: #333;
+            /* Dark gray color for text */
+            font-family: Arial, sans-serif;
+            /* Sets a clean, sans-serif font */
+            text-align: justify;
+            /* Justifies text alignment for a cleaner look */
+            padding: 0 10px;
+            /* Adds padding inside the paragraph for better text placement */
         }
 
         #bookTitle {
+            flex-grow: 1;
             text-align: center;
-            color: #2c3e50;
-            margin-bottom: 20px;
+            margin-top: auto;
+            margin-bottom: auto;
+            color: #ebebeb;
+        }
+
+        #header-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: calc(100vw - 20px);
+            height: 50px;
+            z-index: 1000;
+            /* Ensure header is above other content */
+            padding: 0px 10px;
+            transition: transform 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        /* When the header is hidden */
+        .header-hidden #header-bar {
+            transform: translateY(-100%);
+            /* Moves header out of view */
+        }
+
+        .header-hidden #navigation {
+            top: 0;
+            /* Adjusts navigator to top */
+            height: 100%;
+            /* Expands navigator to full height */
+        }
+
+        .header-hidden #content {
+            margin-top: 0;
+            /* Moves content to the top */
+        }
+
+        #toggleNav {
+            background: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            z-index: 10;
+            /* Make sure it's above other content */
+        }
+
+        #toggleNav {
+            border: none;
+            color: white;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #patreon-section {
+            display: flex;
+            align-items: center;
+        }
+
+        #patreon-login,
+        #patreon-logout {
+            background-color: #ff424d;
+            border: none;
+            color: white;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #patreon-username {
+            margin-right: 10px;
+            font-weight: bold;
+            font-size: 16px;
         }
     </style>
     <script>
@@ -169,10 +236,17 @@
 </head>
 
 <body>
+    <div id="header-bar">
+        <button id="toggleNav">☰</button>
+        <h1 id="bookTitle">Pokemon - Solo's Strange Journey</h1>
+        <div id="patreon-section">
+            <button id="patreon-login">Login with Patreon</button>
+            <span id="patreon-username" style="display: none;"></span>
+            <button id="patreon-logout" style="display: none;">Logout</button>
+        </div>
+    </div>
     <div id="book">
-        <button id="toggleNav" class="float">☰</button>
         <ul id="navigation" class="show">
-            <h1 id="bookTitle">Pokemon - Solo's Strange Journey</h1>
             <!-- Links to HTML files will be inserted here -->
         <li>V1 - My first pokemon<ul>
             <li><a href="#" onclick="loadContent('V1 - My first pokemon\\01_I choose you.html'); return false;">01 I choose you</a></li>
@@ -275,17 +349,140 @@
         document.getElementById('toggleNav').addEventListener('click', function () {
             const nav = document.getElementById('navigation');
             const content = document.getElementById('content');
-            const btn = document.getElementById('toggleNav');
             if (nav.classList.contains('show')) {
                 nav.classList.remove('show');
                 content.classList.add('shift');
-                btn.classList.remove('float');
             } else {
                 nav.classList.add('show');
                 content.classList.remove('shift');
-                btn.classList.add('float');
             }
         });
+
+        let startY;
+        let isHeaderHidden = document.body.classList.contains('header-hidden');
+        const header = document.querySelector('header-bar');
+        const navigation = document.getElementById('navigation');
+        const content = document.getElementById('content');
+
+        // Function to show header
+        function showHeader() {
+            document.body.classList.remove('header-hidden');
+            isHeaderHidden = false;
+        }
+
+        // Function to hide header
+        function hideHeader() {
+            document.body.classList.add('header-hidden');
+            isHeaderHidden = true;
+        }
+
+        // Detect swipe up or down gestures
+        window.addEventListener('touchstart', (e) => {
+            startY = e.touches[0].clientY;
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            let moveY = e.touches[0].clientY;
+            let diffY = startY - moveY;
+
+            if (diffY > 50 && !isHeaderHidden) {
+                // Swipe up: Hide header
+                hideHeader();
+            } else if (diffY < -50 && isHeaderHidden) {
+                // Swipe down: Show header
+                showHeader();
+            }
+        });
+
+        let lastScrollTop = 0;
+
+        // Function to show header
+        function showHeader() {
+            if (isHeaderHidden) {
+                document.body.classList.remove('header-hidden');
+                isHeaderHidden = false;
+            }
+        }
+
+        // Function to hide header
+        function hideHeader() {
+            if (!isHeaderHidden) {
+                document.body.classList.add('header-hidden');
+                isHeaderHidden = true;
+            }
+        }
+
+        // Detect scroll events
+        window.addEventListener('scroll', () => {
+            let currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+            if (currentScrollTop > lastScrollTop && !isHeaderHidden) {
+                // Scrolling down: Hide header
+                hideHeader();
+            } else if (currentScrollTop < lastScrollTop && isHeaderHidden) {
+                // Scrolling up: Show header
+                showHeader();
+            }
+
+            lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop; // For Mobile Safari
+        });
+
+
+    </script>
+
+    <script>
+        const CLIENT_ID = 'BenisBoyOAuth';
+        const REDIRECT_URI = window.location.origin;  // Adjust as needed
+        const PATREON_OAUTH_URL = `https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}`;
+        const patreonLoginButton = document.getElementById('patreon-login');
+        const patreonLogoutButton = document.getElementById('patreon-logout');
+        const patreonUsernameSpan = document.getElementById('patreon-username');
+
+        // Check if user is logged in via Patreon
+        function checkPatreonAuthentication() {
+            const username = localStorage.getItem('patreon_username');
+            if (username) {
+                showPatreonUser(username);
+            } else {
+                patreonLoginButton.style.display = 'block';
+                patreonLogoutButton.style.display = 'none';
+                patreonUsernameSpan.style.display = 'none';
+            }
+        }
+
+        function showPatreonUser(username) {
+            patreonLoginButton.style.display = 'none';
+            patreonLogoutButton.style.display = 'block';
+            patreonUsernameSpan.textContent = `Logged in as ${username}`;
+            patreonUsernameSpan.style.display = 'block';
+        }
+
+        patreonLoginButton.addEventListener('click', function () {
+            window.location.href = PATREON_OAUTH_URL;
+        });
+
+        patreonLogoutButton.addEventListener('click', function () {
+            localStorage.removeItem('patreon_username');
+            checkPatreonAuthentication(); // Recheck and update UI
+        });
+
+        // Simulate getting the username from the OAuth process (this should be handled server-side)
+        function handlePatreonAuth(authCode) {
+            // Simulate retrieving username from the OAuth process
+            const username = "PatreonUser";  // Replace with actual OAuth process to get username
+            localStorage.setItem('patreon_username', username);
+            showPatreonUser(username);
+        }
+
+        // Check if there is an auth code in the URL (for OAuth)
+        const urlParams = new URLSearchParams(window.location.search);
+        const authCode = urlParams.get('code');
+        if (authCode) {
+            handlePatreonAuth(authCode);
+        }
+
+        // Check Patreon authentication status on page load
+        checkPatreonAuthentication();
     </script>
 </body>
 
