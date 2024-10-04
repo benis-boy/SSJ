@@ -219,7 +219,7 @@
                     patreonLoginButton.style.display = 'block';
                     patreonLogoutButton.style.display = 'none';
                     patreonUsernameSpan.style.display = 'none';
-                    document.getElementById('content').innerHTML = "<p>Not a supporter.</p>";
+                    document.getElementById('content').innerHTML = "<p>Not logged in.</p>";
                     return;
                 }
 
@@ -255,7 +255,8 @@
                 } else {
                     console.error('Error:', data);
                 }
-				urlParams.delete("code")
+				urlParams.delete("code");
+				urlParams.delete("state");
 				window.history.replaceState({}, document.title, `${url.pathname}?${urlParams.toString()}`);
             }
 
