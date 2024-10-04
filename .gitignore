@@ -5,3 +5,7 @@
 
 # Local Netlify folder
 .netlify/*
+
+#raw export files
+PSSJ_export.md
+PSSJ_trimmed.md
