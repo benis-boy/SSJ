@@ -215,10 +215,9 @@
 				.catch(error => console.error('Error loading content:', error));
 		}
 		
+		loadContent('homepage.html');
 		// Check localStorage on startup
 		window.addEventListener('load', () => {
-			loadContent('homepage.html');
-			
 			const selectedBook = localStorage.getItem('SELECTED_BOOK');
 			const selectedChapter = localStorage.getItem('SELECTED_CHAPTER');
 
