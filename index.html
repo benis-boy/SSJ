@@ -191,7 +191,8 @@
 		loadNavigation(navigationFile);
 		
 		function loadContent(url) {
-			if (!window.SUPPORTER) return;
+			const isFreePage = ["homepage.html", "not_a_supporter.html", "not_logged_in.html"].includes(url);
+			if (!window.SUPPORTER && !isFreePage) return;
 
 			fetch(url)
 				.then(response => {
@@ -203,11 +204,13 @@
 				.then(data => {
 					document.getElementById('content').innerHTML = data;
 
-					// Store the SELECTED_BOOK and SELECTED_CHAPTER in localStorage
-					window.SELECTED_BOOK = "PSSJ"; // Set the book name here
-					window.SELECTED_CHAPTER = url; // Set the chapter based on the URL
-					localStorage.setItem('SELECTED_BOOK', window.SELECTED_BOOK);
-					localStorage.setItem('SELECTED_CHAPTER', window.SELECTED_CHAPTER);
+					if (!isFreePage) {
+						// Store the SELECTED_BOOK and SELECTED_CHAPTER in localStorage
+						window.SELECTED_BOOK = "PSSJ"; // Set the book name here
+						window.SELECTED_CHAPTER = url; // Set the chapter based on the URL
+						localStorage.setItem('SELECTED_BOOK', window.SELECTED_BOOK);
+						localStorage.setItem('SELECTED_CHAPTER', window.SELECTED_CHAPTER);
+					}
 				})
 				.catch(error => console.error('Error loading content:', error));
 		}
@@ -408,7 +411,7 @@
 		
         </ul>
         <div id="content">
-            <p>Select a chapter.</p>
+            
         </div>
     </div>
 </body>
