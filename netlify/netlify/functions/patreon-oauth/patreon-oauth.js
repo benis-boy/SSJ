@@ -39,6 +39,8 @@ exports.handler = async (event, context) => {
 
   const token_url = 'https://www.patreon.com/api/oauth2/token?';
 
+  const encryption_password = "pokemon";
+
   try {
     // Send a POST request to exchange the authorization code for an access token
     let response = null;
@@ -103,7 +105,7 @@ exports.handler = async (event, context) => {
       return {
         statusCode: 200,
         headers,
-        body: JSON.stringify({ ...token, userInfo: filteredMembershipData }),
+        body: JSON.stringify({ ...token, userInfo: filteredMembershipData, encryption_password }),
       };
     } else {
       // Handle errors from Patreon API

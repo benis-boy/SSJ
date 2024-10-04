@@ -248,7 +248,7 @@
 				})
 				.then(encrypted => {
 					if (isFreePage) return encrypted;
-					return decryptString(encrypted, "pokemon");
+					return decryptString(encrypted, window.ENCRYPTION_PASSWORD ?? "NO_PASSWORD");
 				})
 				.then(data => {
 					document.getElementById('content').innerHTML = data;
@@ -404,6 +404,7 @@
                 if (username) showPatreonUser(username);
 				
 				window.SUPPORTER = token?.userInfo?.supportsMe;
+				window.ENCRYPTION_PASSWORD = token?.userInfo?.encryption_password;
                 
 				if (username && !window.SUPPORTER) loadContent('not_a_supporter.html');
 				if (username && window.SUPPORTER) loadContent('homepage.html');
@@ -414,6 +415,7 @@
             patreonLogoutButton.addEventListener('click', () => {
                 localStorage.removeItem('patreon_token');
 				window.SUPPORTER = false;
+				window.ENCRYPTION_PASSWORD = "NO_PASSWORD";
                 checkPatreonAuthentication();
             });
 
