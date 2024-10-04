@@ -1,4 +1,32 @@
 <div class="homepage-container">
+    <style>
+        .homepage-container, .homepage-container * {
+            all: unset; /* Resets all inherited styles */
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: inherit; /* Keeps parent font */
+            color: inherit;
+        }
+
+        /* Add specific styles for homepage */
+        .homepage-container {
+            padding: 20px;
+            font-family: 'Arial', sans-serif; /* Custom font here */
+            color: #333;
+        }
+
+        .homepage-container h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .homepage-container p {
+            font-size: 1.2em;
+            line-height: 1.6;
+        }
+    </style>
+    
     <h1>Welcome to Solo's Strange Journey</h1>
     <p>Explore the world of Pokémon through exciting stories and adventures. Select a chapter from the navigation to begin!</p>
 </div>
