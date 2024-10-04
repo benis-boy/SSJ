@@ -364,6 +364,7 @@
             patreonLoginButton.addEventListener('click', () => window.location.href = PATREON_OAUTH_URL);
             patreonLogoutButton.addEventListener('click', () => {
                 localStorage.removeItem('patreon_token');
+				window.SUPPORTER = false;
                 checkPatreonAuthentication();
             });
 
