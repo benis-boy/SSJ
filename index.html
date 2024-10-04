@@ -121,6 +121,25 @@
             align-items: center;
         }
 
+        /* When the header is hidden */
+        .header-hidden #header-bar {
+            transform: translateY(-100%);
+            /* Moves header out of view */
+        }
+
+        .header-hidden #navigation {
+            top: 0;
+            /* Adjusts navigator to top */
+            height: calc(100vh - 40px);
+            /* Expands navigator to full height */
+        }
+
+        .header-hidden #content {
+            margin-top: 0;
+            /* Moves content to the top */
+            min-height: calc(100vh - 50px);
+        }
+
         #patreon-username {
             margin-right: 10px;
             font-weight: bold;
