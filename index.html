@@ -149,7 +149,20 @@
         }
     </style>
     <script>
+        function loadContent(url) {
+            if (!window.SUPPORTER) return;
+            window.SELECTED_CHAPTER = true;
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('content').innerHTML = data;
+                })
+                .catch(error => console.error('Error loading content:', error));
+        }
+    </script>
+    <script>
         document.addEventListener('DOMContentLoaded', function () {
+			// navigator highlighting
             document.querySelectorAll('#navigation a').forEach(function (link) {
                 link.addEventListener('click', function () {
                     document.querySelectorAll('#navigation li').forEach(li => li.classList.remove('highlight'));
@@ -179,7 +192,10 @@
                     content.classList.remove('shift');
                 }
             });
-
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
             // Patreon login/logout
             const CLIENT_ID = 'DCmpYjAt5oF-1poN2N_hW22VXTuz8BNIOPk1yeoctffuvobAJCu8I7N7fKc1ngMp';
             const REDIRECT_URI = "https://benis-boy.github.io/SSJ/";
@@ -212,8 +228,7 @@
 				
 				window.SUPPORTER = token?.userInfo?.supportsMe;
                 
-                document.getElementById('content').innerHTML = token?.userInfo?.supportsMe
-                    ? "<p>Select a chapter.</p>" : "<p>Not a supporter.</p>";
+				if (username && !window.SUPPORTER) loadContent('not_a_supporter.html');
             }
 
             patreonLoginButton.addEventListener('click', () => window.location.href = PATREON_OAUTH_URL);
@@ -268,18 +283,6 @@
 
 		// Load the initial navigation file
 		loadNavigation(navigationFile);
-    </script>
-    <script>
-        function loadContent(url) {
-            if (!window.SUPPORTER) return;
-            window.SELECTED_CHAPTER = true;
-            fetch(url)
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('content').innerHTML = data;
-                })
-                .catch(error => console.error('Error loading content:', error));
-        }
     </script>
 </head>
 <body>
