@@ -209,6 +209,8 @@
 
                 const username = token?.userInfo?.userName;
                 if (username) showPatreonUser(username);
+				
+				window.SUPPORTER = token?.userInfo?.supportsMe;
                 
                 document.getElementById('content').innerHTML = token?.userInfo?.supportsMe
                     ? "<p>Select a chapter.</p>" : "<p>Not a supporter.</p>";
@@ -239,7 +241,7 @@
                     console.error('Error:', data);
                 }
 				urlParams.delete("code")
-				window.history.replaceState({}, document.title, `${url.pathname}?${params.toString()}`);
+				window.history.replaceState({}, document.title, `${url.pathname}?${urlParams.toString()}`);
             }
 
             checkPatreonAuthentication();
