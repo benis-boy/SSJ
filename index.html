@@ -234,28 +234,41 @@
             }
 
             checkPatreonAuthentication();
-			
-			// The file to load at startup. You can change this in the future.
-			let navigationFile = "PSSJ_navigation.html";
-
-			// Function to load navigation from an external HTML file
-			function loadNavigation(file) {
-				fetch(file)
-					.then(response => {
-						if (!response.ok) {
-							throw new Error('Failed to load navigation');
-						}
-						return response.text();
-					})
-					.then(data => {
-						document.getElementById('navigation').innerHTML = data;
-					})
-					.catch(error => console.error('Error loading navigation:', error));
-			}
-
-			// Load the initial navigation file
-			loadNavigation(navigationFile);
         });
+    </script>
+    <script>
+		// The file to load at startup. You can change this in the future.
+		let navigationFile = "PSSJ_navigation.html";
+
+		// Function to load navigation from an external HTML file
+		function loadNavigation(file) {
+			fetch(file)
+				.then(response => {
+					if (!response.ok) {
+						throw new Error('Failed to load navigation');
+					}
+					return response.text();
+				})
+				.then(data => {
+					document.getElementById('navigation').innerHTML = data;
+				})
+				.catch(error => console.error('Error loading navigation:', error));
+		}
+
+		// Load the initial navigation file
+		loadNavigation(navigationFile);
+    </script>
+    <script>
+        function loadContent(url) {
+            if (!window.SUPPORTER) return;
+            window.SELECTED_CHAPTER = true;
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('content').innerHTML = data;
+                })
+                .catch(error => console.error('Error loading content:', error));
+        }
     </script>
 </head>
 <body>
