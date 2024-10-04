@@ -168,26 +168,27 @@
         }
     </style>
     <script>
-		// Check localStorage on startup
-		window.addEventListener('load', () => {
-			const selectedBook = localStorage.getItem('SELECTED_BOOK');
-			const selectedChapter = localStorage.getItem('SELECTED_CHAPTER');
+		// The file to load at startup. You can change this in the future.
+		let navigationFile = "PSSJ_navigation.html";
 
-			// Set the SELECTED_BOOK and SELECTED_CHAPTER if they exist in localStorage
-			if (selectedBook) {
-				window.SELECTED_BOOK = selectedBook;
-			}
-			if (selectedChapter) {
-				window.SELECTED_CHAPTER = selectedChapter;
-			}
+		// Function to load navigation from an external HTML file
+		function loadNavigation(file) {
+			fetch(file)
+				.then(response => {
+					if (!response.ok) {
+						throw new Error('Failed to load navigation');
+					}
+					return response.text();
+				})
+				.then(data => {
+					document.getElementById('navigation').innerHTML = data;
+				})
+				.catch(error => console.error('Error loading navigation:', error));
+		}
 
-			// If the user is not a supporter, clear the localStorage variables
-			if (!window.SUPPORTER) {
-				localStorage.removeItem('SELECTED_BOOK');
-				localStorage.removeItem('SELECTED_CHAPTER');
-			}
-		});
-
+		// Load the initial navigation file
+		loadNavigation(navigationFile);
+		
 		function loadContent(url) {
 			if (!window.SUPPORTER) return;
 
@@ -209,6 +210,30 @@
 				})
 				.catch(error => console.error('Error loading content:', error));
 		}
+		
+		// Check localStorage on startup
+		window.addEventListener('load', () => {
+			loadContent('homepage.html');
+			
+			const selectedBook = localStorage.getItem('SELECTED_BOOK');
+			const selectedChapter = localStorage.getItem('SELECTED_CHAPTER');
+
+			// Set the SELECTED_BOOK and SELECTED_CHAPTER if they exist in localStorage
+			if (selectedBook) {
+				window.SELECTED_BOOK = selectedBook;
+			}
+			if (selectedChapter) {
+				window.SELECTED_CHAPTER = selectedChapter;
+			}
+
+			// If the user is not a supporter, clear the localStorage variables
+			if (!window.SUPPORTER) {
+				localStorage.removeItem('SELECTED_BOOK');
+				localStorage.removeItem('SELECTED_CHAPTER');
+			} else {
+				loadContent(selectedChapter);
+			}
+		});
 	</script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -364,28 +389,6 @@
 
             checkPatreonAuthentication();
         });
-    </script>
-    <script>
-		// The file to load at startup. You can change this in the future.
-		let navigationFile = "PSSJ_navigation.html";
-
-		// Function to load navigation from an external HTML file
-		function loadNavigation(file) {
-			fetch(file)
-				.then(response => {
-					if (!response.ok) {
-						throw new Error('Failed to load navigation');
-					}
-					return response.text();
-				})
-				.then(data => {
-					document.getElementById('navigation').innerHTML = data;
-				})
-				.catch(error => console.error('Error loading navigation:', error));
-		}
-
-		// Load the initial navigation file
-		loadNavigation(navigationFile);
     </script>
 </head>
 <body>
