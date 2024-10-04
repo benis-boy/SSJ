@@ -268,7 +268,7 @@
                     patreonLoginButton.style.display = 'block';
                     patreonLogoutButton.style.display = 'none';
                     patreonUsernameSpan.style.display = 'none';
-                    document.getElementById('content').innerHTML = "<p>Not logged in.</p>";
+					loadContent('not_logged_in.html');
                     return;
                 }
 
