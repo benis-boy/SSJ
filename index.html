@@ -149,17 +149,48 @@
         }
     </style>
     <script>
-        function loadContent(url) {
-            if (!window.SUPPORTER) return;
-            window.SELECTED_CHAPTER = true;
-            fetch(url)
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('content').innerHTML = data;
-                })
-                .catch(error => console.error('Error loading content:', error));
-        }
-    </script>
+		// Check localStorage on startup
+		window.addEventListener('load', () => {
+			const selectedBook = localStorage.getItem('SELECTED_BOOK');
+			const selectedChapter = localStorage.getItem('SELECTED_CHAPTER');
+
+			// Set the SELECTED_BOOK and SELECTED_CHAPTER if they exist in localStorage
+			if (selectedBook) {
+				window.SELECTED_BOOK = selectedBook;
+			}
+			if (selectedChapter) {
+				window.SELECTED_CHAPTER = selectedChapter;
+			}
+
+			// If the user is not a supporter, clear the localStorage variables
+			if (!window.SUPPORTER) {
+				localStorage.removeItem('SELECTED_BOOK');
+				localStorage.removeItem('SELECTED_CHAPTER');
+			}
+		});
+
+		function loadContent(url) {
+			if (!window.SUPPORTER) return;
+
+			fetch(url)
+				.then(response => {
+					if (!response.ok) {
+						throw new Error('Network response was not ok');
+					}
+					return response.text();
+				})
+				.then(data => {
+					document.getElementById('content').innerHTML = data;
+
+					// Store the SELECTED_BOOK and SELECTED_CHAPTER in localStorage
+					window.SELECTED_BOOK = "PSSJ"; // Set the book name here
+					window.SELECTED_CHAPTER = url; // Set the chapter based on the URL
+					localStorage.setItem('SELECTED_BOOK', window.SELECTED_BOOK);
+					localStorage.setItem('SELECTED_CHAPTER', window.SELECTED_CHAPTER);
+				})
+				.catch(error => console.error('Error loading content:', error));
+		}
+	</script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
 			// navigator highlighting
