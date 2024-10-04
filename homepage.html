@@ -3,19 +3,6 @@
 
     <div class="library" style="display: flex; gap: 20px;">
 	
-		<script>
-			function changeBook(bookId) {
-				// Set localStorage variable
-				localStorage.setItem('SELECTED_BOOK', bookId);
-				
-				// Set window variable
-				window.SELECTED_BOOK = bookId;
-				
-				// Load navigation
-				loadNavigation(bookId + '_navigation.html');
-			}
-		</script>
-
         <div class="book-item" style="position: relative; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); border-radius: 15px; overflow: hidden; transition: transform 0.3s; width: 300px;" onclick="changeBook('PSSJ')">
             <img src="PSSJ_600x800_2.png"
 				alt="Pokemon - Solo's Strange Journey" 

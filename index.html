@@ -451,6 +451,18 @@
             checkPatreonAuthentication();
         });
     </script>
+	<script>
+		function changeBook(bookId) {
+			// Set localStorage variable
+			localStorage.setItem('SELECTED_BOOK', bookId);
+			
+			// Set window variable
+			window.SELECTED_BOOK = bookId;
+			
+			// Load navigation
+			loadNavigation(bookId + '_navigation.html');
+		}
+	</script>
 </head>
 <body>
     <div id="header-bar">
