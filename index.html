@@ -214,7 +214,8 @@
                 checkPatreonAuthentication();
             });
 
-            const urlParams = new URLSearchParams(window.location.search);
+			const url = new URL(window.location);
+            const urlParams = new URLSearchParams(url.search);
             const authCode = urlParams.get('code');
             if (authCode) handlePatreonAuth({ code: authCode });
 
@@ -231,6 +232,8 @@
                 } else {
                     console.error('Error:', data);
                 }
+				urlParams.delete("code")
+				window.history.replaceState({}, document.title, `${url.pathname}?${params.toString()}`);
             }
 
             checkPatreonAuthentication();
