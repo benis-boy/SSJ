@@ -195,6 +195,55 @@
         });
     </script>
     <script>
+		let startY;
+		let lastScrollTop = 0;
+		let isHeaderHidden = document.body.classList.contains('header-hidden');
+
+		// Toggle the header visibility
+		function toggleHeader(show) {
+			document.body.classList.toggle('header-hidden', !show);
+			isHeaderHidden = !show;
+		}
+
+		// Detect swipe gestures
+		window.addEventListener('touchstart', (e) => {
+			startY = e.touches[0].clientY;
+		});
+
+		window.addEventListener('touchmove', (e) => {
+			if (!window.SUPPORTER || !window.SELECTED_CHAPTER) return;
+			
+			const moveY = e.touches[0].clientY;
+			const diffY = startY - moveY;
+
+			if (diffY > 50 && !isHeaderHidden) {
+				// Swipe up: Hide header
+				toggleHeader(false);
+			} else if (diffY < -50 && isHeaderHidden) {
+				// Swipe down: Show header
+				toggleHeader(true);
+			}
+		});
+
+		// Detect scroll events
+		window.addEventListener('scroll', () => {
+			if (!window.SUPPORTER || !window.SELECTED_CHAPTER) return;
+
+			const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+			if (currentScrollTop > lastScrollTop && !isHeaderHidden) {
+				// Scrolling down: Hide header
+				toggleHeader(false);
+			} else if (currentScrollTop < lastScrollTop && isHeaderHidden) {
+				// Scrolling up: Show header
+				toggleHeader(true);
+			}
+
+			lastScrollTop = Math.max(currentScrollTop, 0); // Ensure the value doesn't go below 0
+		});
+
+	</script>
+	<script>
         document.addEventListener('DOMContentLoaded', function () {
             // Patreon login/logout
             const CLIENT_ID = 'DCmpYjAt5oF-1poN2N_hW22VXTuz8BNIOPk1yeoctffuvobAJCu8I7N7fKc1ngMp';
@@ -229,6 +278,8 @@
 				window.SUPPORTER = token?.userInfo?.supportsMe;
                 
 				if (username && !window.SUPPORTER) loadContent('not_a_supporter.html');
+				if (username && window.SUPPORTER) loadContent('homepage.html');
+				if (!username) loadContent('not_logged_in.html');
             }
 
             patreonLoginButton.addEventListener('click', () => window.location.href = PATREON_OAUTH_URL);
