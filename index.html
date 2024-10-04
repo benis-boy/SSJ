@@ -248,6 +248,7 @@
 				})
 				.then(encrypted => {
 					if (isFreePage) return encrypted;
+					console.log(window.ENCRYPTION_PASSWORD ?? "NO_PASSWORD");
 					return decryptString(encrypted, window.ENCRYPTION_PASSWORD ?? "NO_PASSWORD");
 				})
 				.then(data => {
