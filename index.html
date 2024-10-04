@@ -282,7 +282,7 @@
 			if (!window.SUPPORTER) {
 				localStorage.removeItem('SELECTED_BOOK');
 				localStorage.removeItem('SELECTED_CHAPTER');
-			} else {
+			} else if (window.SELECTED_CHAPTER) {
 				loadContent(selectedChapter);
 			}
 		});
