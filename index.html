@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokemon - Solo's Strange Journey</title>
+    <title id="pageTitle">Pokemon - Solo's Strange Journey</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -452,7 +452,7 @@
         });
     </script>
 	<script>
-		function changeBook(bookId) {
+		function changeBook(bookId, bookTitle) {
 			// Set localStorage variable
 			localStorage.setItem('SELECTED_BOOK', bookId);
 			
@@ -461,6 +461,8 @@
 			
 			// Load navigation
 			loadNavigation(bookId + '_navigation.html');
+			document.getElementById("bookTitle").textContent = bookTitle;
+			document.getElementById("pageTitle").textContent = bookTitle;
 		}
 	</script>
 </head>
