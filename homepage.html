@@ -1,19 +1,51 @@
 <div class="homepage-container" style="padding: 20px; font-family: 'Arial', sans-serif; color: #333;">
     <h1 style="font-size: 2em; margin-bottom: 20px;">BenisBoy's Library</h1>
 
-    <div class="book-item" style="display: flex; margin-bottom: 20px; padding: 10px; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); transition: transform 0.2s;">
-        <img src="path/to/pokemon-solo-strange-journey.jpg" alt="Pokemon - Solo's Strange Journey" style="width: 600px; height: 800px; object-fit: cover; border-radius: 8px; margin-right: 20px;">
-        <div>
-            <h2 style="font-size: 1.5em; margin: 0;">Pokemon - Solo's Strange Journey</h2>
-            <p style="font-size: 1.2em; line-height: 1.6; margin: 0;">TODO</p>
-        </div>
-    </div>
+    <div class="library" style="display: flex; gap: 20px;">
+	
+		<script>
+			function changeBook(bookId) {
+				// Set localStorage variable
+				localStorage.setItem('SELECTED_BOOK', bookId);
+				
+				// Set window variable
+				window.SELECTED_BOOK = bookId;
+				
+				// Load navigation
+				loadNavigation(bookId + '_navigation.html');
+			}
+		</script>
 
-    <div class="book-item" style="display: flex; margin-bottom: 20px; padding: 10px; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); transition: transform 0.2s;">
-        <img src="path/to/haunted-house-wicked-witch.jpg" alt="Haunted House of a Wicked Witch" style="width: 600px; height: 800px; object-fit: cover; border-radius: 8px; margin-right: 20px;">
-        <div>
-            <h2 style="font-size: 1.5em; margin: 0;">Haunted House of a Wicked Witch</h2>
-            <p style="font-size: 1.2em; line-height: 1.6; margin: 0;">Coming soon</p>
+        <div class="book-item" style="position: relative; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); border-radius: 15px; overflow: hidden; transition: transform 0.3s; width: 300px;" onclick="changeBook('PSSJ')">
+            <img src="PSSJ_600x800_2.png" 
+				srcset="PSSJ_3600x4800_4.png" 
+				alt="Pokemon - Solo's Strange Journey" 
+				style="width: 300px; height: 400px;" 
+				loading="lazy">
+            <div class="item-details" style="padding: 10px; text-align: center;">
+                <h2 style="font-size: 1.5em; margin: 10px 0; font-weight: bold;">Pokemon - Solo's Strange Journey</h2>
+                <p style="font-size: 1em; color: #777;">6 Volumes, 370.000 Words</p>
+                <p style="font-size: 1em; color: #777;">Volume 7 coming on 14th Oct 2024</p>
+            </div>
         </div>
+
+        <div class="book-item" style="position: relative; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); border-radius: 15px; overflow: hidden; transition: transform 0.3s; width: 300px;">
+            <img id="HauntedHouseImage"
+				src="HHWW_temp.png" 
+				alt="Haunted House of a Wicked Witch" 
+				style="width: 300px; height: 400px;" 
+				loading="lazy">
+            <div class="item-details" style="padding: 10px; text-align: center;">
+                <h2 style="font-size: 1.5em; margin: 10px 0; font-weight: bold;">Haunted House of a Wicked Witch</h2>
+                <p style="font-size: 1em; color: #777;">Coming soon</p>
+            </div>
+			<script>
+				// Load high-resolution image after a delay
+				setTimeout(() => {
+					document.getElementById('HauntedHouseImage').src = 'HHWW_600x800_3.png';
+				}, 150);
+			</script>
+        </div>
+
     </div>
 </div>
