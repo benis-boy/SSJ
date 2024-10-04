@@ -405,7 +405,7 @@
                 if (username) showPatreonUser(username);
 				
 				window.SUPPORTER = token?.userInfo?.supportsMe;
-				window.ENCRYPTION_PASSWORD = token?.userInfo?.encryption_password;
+				window.ENCRYPTION_PASSWORD = token?.encryption_password;
                 
 				if (username && !window.SUPPORTER) loadContent('not_a_supporter.html');
 				if (username && window.SUPPORTER) loadContent('homepage.html');
