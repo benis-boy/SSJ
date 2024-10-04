@@ -31,6 +31,7 @@
 
         <div class="book-item" style="position: relative; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); border-radius: 15px; overflow: hidden; transition: transform 0.3s; width: 300px;">
             <img id="HauntedHouseImage"
+				onload="setTimeout(()=>document.getElementById('HauntedHouseImage').src = 'HHWW_600x800_3.png';}, 150);"
 				src="HHWW_temp.png" 
 				alt="Haunted House of a Wicked Witch" 
 				style="width: 300px; height: 400px;" 
@@ -39,12 +40,6 @@
                 <h2 style="font-size: 1.5em; margin: 10px 0; font-weight: bold;">Haunted House of a Wicked Witch</h2>
                 <p style="font-size: 1em; color: #777;">Coming soon</p>
             </div>
-			<script>
-				// Load high-resolution image after a delay
-				setTimeout(() => {
-					document.getElementById('HauntedHouseImage').src = 'HHWW_600x800_3.png';
-				}, 150);
-			</script>
         </div>
 
     </div>
