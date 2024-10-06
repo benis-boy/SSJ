@@ -265,6 +265,11 @@
 						window.SELECTED_CHAPTER = url; // Set the chapter based on the URL
 						localStorage.setItem('SELECTED_BOOK', window.SELECTED_BOOK);
 						localStorage.setItem('SELECTED_CHAPTER', window.SELECTED_CHAPTER);
+						
+						window.scrollTo({
+							top: 0,
+							behavior: 'smooth' // Optional, for a smooth scrolling effect
+						});
 					}
 				})
 				.catch(error => console.error('Error loading content:', error));
