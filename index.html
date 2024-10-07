@@ -260,7 +260,7 @@
 		
 		function loadContent(url) {
 			const isFreePage = ["homepage.html", "not_a_supporter.html", "not_logged_in.html"].includes(url);
-			if (!window.SUPPORTER && !isFreePage) return;
+			if (!window.SUPPORTER && !isFreePage) return loadContent('homepage.html');
 
 			fetch(url)
 				.then(response => {
@@ -425,7 +425,6 @@
                     patreonLoginButton.style.display = 'block';
                     patreonLogoutButton.style.display = 'none';
                     patreonUsernameSpan.style.display = 'none';
-					loadContent('not_logged_in.html');
                     return;
                 }
 
