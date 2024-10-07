@@ -171,6 +171,24 @@
             #content { margin-left: 0; padding: 10px; }
             body { --header-height: 80px; }
             #bookTitle { font-size: 20px; }
+			
+			.library {
+				flex-direction: column; /* Align items vertically */
+				gap: 15px;
+			}
+
+			.book-item {
+				width: 100%; /* Full width on mobile */
+			}
+
+			.book-item img {
+				width: 100%; /* Ensure images are responsive */
+				height: auto;
+			}
+
+			.item-details {
+				padding: 15px;
+			}
         }
     </style>
 	<script>
