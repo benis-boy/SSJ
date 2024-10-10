@@ -315,7 +315,7 @@
 				localStorage.removeItem('SELECTED_CHAPTER');
 				localStorage.removeItem('CURRENT_CHAPTER_ENCODED');
 			} else if (window.SELECTED_CHAPTER) {
-				loadContent(selectedChapter, isEncoded);
+				loadContent(selectedChapter, isEncoded === "true");
 			}
 		});
 	</script>
