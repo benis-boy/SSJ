@@ -258,9 +258,8 @@
 		// Load the initial navigation file
 		loadNavigation(navigationFile);
 		
-		function loadContent(url) {
-			const isFreePage = ["homepage.html", "not_a_supporter.html", "not_logged_in.html"].includes(url);
-			if (!window.SUPPORTER && !isFreePage) return loadContent('homepage.html');
+		function loadContent(url, is_encrypted = false) {
+			if (!window.SUPPORTER && is_encrypted) return loadContent('not_a_supporter.html');
 
 			fetch(url)
 				.then(response => {
@@ -270,9 +269,10 @@
 					return response.text();
 				})
 				.then(encrypted => {
-					if (isFreePage) return encrypted;
-					console.log(window.ENCRYPTION_PASSWORD ?? "NO_PASSWORD");
-					return decryptString(encrypted, window.ENCRYPTION_PASSWORD ?? "NO_PASSWORD");
+					if (!is_encrypted) return encrypted;
+                    const pw = window.ENCRYPTION_PASSWORD ?? "NO_PASSWORD"
+					if (pw === "NO_PASSWORD") console.error("You aren't using the server-provided passphrase to decode this content!")
+					return decryptString(encrypted, pw);
 				})
 				.then(data => {
 					document.getElementById('content').innerHTML = data;
