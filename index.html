@@ -277,12 +277,13 @@
 				.then(data => {
 					document.getElementById('content').innerHTML = data;
 
-					if (!isFreePage) {
+					if (url.includes("PSSJ\\")) {
 						// Store the SELECTED_BOOK and SELECTED_CHAPTER in localStorage
 						window.SELECTED_BOOK = "PSSJ"; // Set the book name here
 						window.SELECTED_CHAPTER = url; // Set the chapter based on the URL
 						localStorage.setItem('SELECTED_BOOK', window.SELECTED_BOOK);
 						localStorage.setItem('SELECTED_CHAPTER', window.SELECTED_CHAPTER);
+                        localStorage.setItem('CURRENT_CHAPTER_ENCODED', is_encrypted);
 						
 						window.scrollTo({
 							top: 0,
@@ -298,6 +299,7 @@
 		window.addEventListener('load', () => {
 			const selectedBook = localStorage.getItem('SELECTED_BOOK');
 			const selectedChapter = localStorage.getItem('SELECTED_CHAPTER');
+			const isEncoded = localStorage.getItem('CURRENT_CHAPTER_ENCODED');
 
 			// Set the SELECTED_BOOK and SELECTED_CHAPTER if they exist in localStorage
 			if (selectedBook) {
@@ -311,8 +313,9 @@
 			if (!window.SUPPORTER) {
 				localStorage.removeItem('SELECTED_BOOK');
 				localStorage.removeItem('SELECTED_CHAPTER');
+				localStorage.removeItem('CURRENT_CHAPTER_ENCODED');
 			} else if (window.SELECTED_CHAPTER) {
-				loadContent(selectedChapter);
+				loadContent(selectedChapter, isEncoded);
 			}
 		});
 	</script>
