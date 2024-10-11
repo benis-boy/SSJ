@@ -474,13 +474,13 @@
             }
 
             checkPatreonAuthentication();
-        });
 
-        const _token = JSON.parse(localStorage.getItem('patreon_token'));
-        window.addEventListener("load", function () {
-            if (_token?.refresh_token) {
-                handlePatreonAuth({ refresh_token: _token.refresh_token });
-            }
+            const _token = JSON.parse(localStorage.getItem('patreon_token'));
+            window.addEventListener("load", function () {
+                if (_token?.refresh_token) {
+                    handlePatreonAuth({ refresh_token: _token.refresh_token });
+                }
+            });
         });
     </script>
     <script>
