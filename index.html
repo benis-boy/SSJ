@@ -374,10 +374,8 @@
                 const moveY = e.touches[0].clientY;
                 const diffY = startY - moveY;
                 if (diffY > 50) {
-                    // Swipe up: Hide header
                     document.body.classList.add('header-hidden');
                 } else if (diffY < -50) {
-                    // Swipe down: Show header
                     document.body.classList.remove('header-hidden');
                 }
 
@@ -397,12 +395,10 @@
 
                 const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-                if (currentScrollTop > lastScrollTop && !isHeaderHidden) {
-                    // Scrolling down: Hide header
-                    toggleHeader(false);
-                } else if (currentScrollTop < lastScrollTop && isHeaderHidden) {
-                    // Scrolling up: Show header
-                    toggleHeader(true);
+                if (currentScrollTop > lastScrollTop) {
+                    document.body.classList.add('header-hidden');
+                } else if (currentScrollTop < lastScrollTop) {
+                    document.body.classList.remove('header-hidden');
                 }
 
                 lastScrollTop = Math.max(currentScrollTop, 0); // Ensure the value doesn't go below 0
