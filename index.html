@@ -435,6 +435,10 @@
             const patreonLogoutButton = document.getElementById('patreon-logout');
             const patreonUsernameSpan = document.getElementById('patreon-username');
 
+            patreonLoginButton.addEventListener('click', function () {
+                window.open(PATREON_OAUTH_URL, "_self");
+            });
+
             function showPatreonUser(username) {
                 patreonLoginButton.style.display = 'none';
                 patreonLogoutButton.style.display = 'block';
@@ -462,10 +466,6 @@
                 if (username && window.SUPPORTER) loadContent('homepage.html');
                 if (!username) loadContent('not_logged_in.html');
             }
-
-            patreonLoginButton.addEventListener('click', function () {
-                window.location.href = PATREON_OAUTH_URL;
-            });
             patreonLogoutButton.addEventListener('click', () => {
                 localStorage.removeItem('patreon_token');
                 window.SUPPORTER = false;
