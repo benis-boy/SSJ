@@ -280,7 +280,10 @@
         loadNavigation(navigationFile);
 
         function loadContent(url, is_encrypted = false) {
-            if (!window.SUPPORTER && is_encrypted) return loadContent('not_a_supporter.html');
+            if (!window.SUPPORTER && is_encrypted) {
+                document.body.classList.remove('header-hidden');
+                return loadContent('not_a_supporter.html');
+            }
 
             fetch(url)
                 .then(response => {
@@ -370,14 +373,14 @@
 
             window.addEventListener('touchmove', (e) => {
 
-                if (!(window.SUPPORTER && window.SELECTED_CHAPTER)) {
-                    const moveY = e.touches[0].clientY;
-                    const diffY = startY - moveY;
-                    if (diffY > 50) {
+                const moveY = e.touches[0].clientY;
+                const diffY = startY - moveY;
+                if (diffY > 50) {
+                    if (window.SUPPORTER) {
                         document.body.classList.add('header-hidden');
-                    } else if (diffY < -50) {
-                        document.body.classList.remove('header-hidden');
                     }
+                } else if (diffY < -50) {
+                    document.body.classList.remove('header-hidden');
                 }
 
                 let endX = e.changedTouches[0].clientX;
