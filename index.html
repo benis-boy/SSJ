@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -83,8 +84,8 @@
             margin-top: var(--header-height);
             transition: margin-left 0.3s ease, margin-top 0.3s ease;
         }
-		
-		/* Styles for paragraphs inside the content area */
+
+        /* Styles for paragraphs inside the content area */
         #content p {
             margin: 1em 0;
             line-height: 1.6;
@@ -151,13 +152,18 @@
             display: flex;
             align-items: center;
         }
-		
-		.book-item:hover {
-			transform: scale(1.02); /* Slightly scale up the item on hover */
-			box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
-		}
 
-        #toggleNav, #patreon-login, #patreon-logout, #home-button {
+        .book-item:hover {
+            transform: scale(1.02);
+            /* Slightly scale up the item on hover */
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            /* Enhanced shadow on hover */
+        }
+
+        #toggleNav,
+        #patreon-login,
+        #patreon-logout,
+        #home-button {
             background-color: #ff424d;
             border: none;
             color: white;
@@ -167,161 +173,176 @@
         }
 
         @media screen and (max-device-width: 768px) {
-            #toggleNav { display: none; }
-            #content { margin-left: 0; padding: 10px; }
-            body { --header-height: 80px; }
-            #bookTitle { font-size: 20px; }
-			
-			.library {
-				flex-direction: column; /* Align items vertically */
-				gap: 15px;
-			}
+            #toggleNav {
+                display: none;
+            }
 
-			.book-item {
-				width: 100%; /* Full width on mobile */
-			}
+            #content {
+                margin-left: 0;
+                padding: 10px;
+            }
 
-			.book-item img {
-				width: 100%; /* Ensure images are responsive */
-				height: auto;
-			}
+            body {
+                --header-height: 80px;
+            }
 
-			.item-details {
-				padding: 15px;
-			}
+            #bookTitle {
+                font-size: 20px;
+            }
+
+            .library {
+                flex-direction: column;
+                /* Align items vertically */
+                gap: 15px;
+            }
+
+            .book-item {
+                width: 100%;
+                /* Full width on mobile */
+            }
+
+            .book-item img {
+                width: 100%;
+                /* Ensure images are responsive */
+                height: auto;
+            }
+
+            .item-details {
+                padding: 15px;
+            }
         }
     </style>
-	<script>
-		async function decryptString(encryptedText, password) {
-			const textBytes = Uint8Array.from(atob(encryptedText), c => c.charCodeAt(0));
-
-			// Extract IV and ciphertext from the encrypted string
-			const iv = textBytes.slice(0, 16);  // First 16 bytes are the IV
-			const ciphertext = textBytes.slice(16);  // The rest is the encrypted data
-
-			// Derive a key from the password using PBKDF2
-			const enc = new TextEncoder();
-			const keyMaterial = await window.crypto.subtle.importKey(
-				"raw",
-				enc.encode(password),
-				"PBKDF2",
-				false,
-				["deriveKey"]
-			);
-
-			const key = await window.crypto.subtle.deriveKey(
-				{
-					name: "PBKDF2",
-					salt: enc.encode("salt_"),  // Ensure the salt matches the one in Python
-					iterations: 100000,
-					hash: "SHA-256"
-				},
-				keyMaterial,
-				{
-					name: "AES-CBC",
-					length: 256
-				},
-				false,
-				["decrypt"]
-			);
-
-			// Decrypt the data
-			const decrypted = await window.crypto.subtle.decrypt(
-				{ name: "AES-CBC", iv: iv },
-				key,
-				ciphertext
-			);
-
-			const decoder = new TextDecoder();
-			return decoder.decode(decrypted);
-		}
-	</script>
     <script>
-		// The file to load at startup. You can change this in the future.
-		let navigationFile = "PSSJ_navigation.html";
+        async function decryptString(encryptedText, password) {
+            const textBytes = Uint8Array.from(atob(encryptedText), c => c.charCodeAt(0));
 
-		// Function to load navigation from an external HTML file
-		function loadNavigation(file) {
-			fetch(file)
-				.then(response => {
-					if (!response.ok) {
-						throw new Error('Failed to load navigation');
-					}
-					return response.text();
-				})
-				.then(data => {
-					document.getElementById('navigation').innerHTML = data;
-				})
-				.catch(error => console.error('Error loading navigation:', error));
-		}
+            // Extract IV and ciphertext from the encrypted string
+            const iv = textBytes.slice(0, 16);  // First 16 bytes are the IV
+            const ciphertext = textBytes.slice(16);  // The rest is the encrypted data
 
-		// Load the initial navigation file
-		loadNavigation(navigationFile);
-		
-		function loadContent(url, is_encrypted = false) {
-			if (!window.SUPPORTER && is_encrypted) return loadContent('not_a_supporter.html');
+            // Derive a key from the password using PBKDF2
+            const enc = new TextEncoder();
+            const keyMaterial = await window.crypto.subtle.importKey(
+                "raw",
+                enc.encode(password),
+                "PBKDF2",
+                false,
+                ["deriveKey"]
+            );
 
-			fetch(url)
-				.then(response => {
-					if (!response.ok) {
-						throw new Error('Network response was not ok');
-					}
-					return response.text();
-				})
-				.then(encrypted => {
-					if (!is_encrypted) return encrypted;
+            const key = await window.crypto.subtle.deriveKey(
+                {
+                    name: "PBKDF2",
+                    salt: enc.encode("salt_"),  // Ensure the salt matches the one in Python
+                    iterations: 100000,
+                    hash: "SHA-256"
+                },
+                keyMaterial,
+                {
+                    name: "AES-CBC",
+                    length: 256
+                },
+                false,
+                ["decrypt"]
+            );
+
+            // Decrypt the data
+            const decrypted = await window.crypto.subtle.decrypt(
+                { name: "AES-CBC", iv: iv },
+                key,
+                ciphertext
+            );
+
+            const decoder = new TextDecoder();
+            return decoder.decode(decrypted);
+        }
+    </script>
+    <script>
+        // The file to load at startup. You can change this in the future.
+        let navigationFile = "PSSJ_navigation.html";
+
+        // Function to load navigation from an external HTML file
+        function loadNavigation(file) {
+            fetch(file)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to load navigation');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    document.getElementById('navigation').innerHTML = data;
+                })
+                .catch(error => console.error('Error loading navigation:', error));
+        }
+
+        // Load the initial navigation file
+        loadNavigation(navigationFile);
+
+        function loadContent(url, is_encrypted = false) {
+            if (!window.SUPPORTER && is_encrypted) return loadContent('not_a_supporter.html');
+
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(encrypted => {
+                    if (!is_encrypted) return encrypted;
                     const pw = window.ENCRYPTION_PASSWORD ?? "NO_PASSWORD"
-					if (pw === "NO_PASSWORD") console.error("You aren't using the server-provided passphrase to decode this content!")
-					return decryptString(encrypted, pw);
-				})
-				.then(data => {
-					document.getElementById('content').innerHTML = data;
+                    if (pw === "NO_PASSWORD") console.error("You aren't using the server-provided passphrase to decode this content!")
+                    return decryptString(encrypted, pw);
+                })
+                .then(data => {
+                    document.getElementById('content').innerHTML = data;
 
-					if (url.includes("PSSJ\\")) {
-						// Store the SELECTED_BOOK and SELECTED_CHAPTER in localStorage
-						window.SELECTED_BOOK = "PSSJ"; // Set the book name here
-						window.SELECTED_CHAPTER = url; // Set the chapter based on the URL
-						localStorage.setItem('SELECTED_BOOK', window.SELECTED_BOOK);
-						localStorage.setItem('SELECTED_CHAPTER', window.SELECTED_CHAPTER);
+                    if (url.includes("PSSJ\\")) {
+                        // Store the SELECTED_BOOK and SELECTED_CHAPTER in localStorage
+                        window.SELECTED_BOOK = "PSSJ"; // Set the book name here
+                        window.SELECTED_CHAPTER = url; // Set the chapter based on the URL
+                        localStorage.setItem('SELECTED_BOOK', window.SELECTED_BOOK);
+                        localStorage.setItem('SELECTED_CHAPTER', window.SELECTED_CHAPTER);
                         localStorage.setItem('CURRENT_CHAPTER_ENCODED', is_encrypted);
-						
-						window.scrollTo({
-							top: 0,
-							behavior: 'smooth' // Optional, for a smooth scrolling effect
-						});
-					}
-				})
-				.catch(error => console.error('Error loading content:', error));
-		}
-		
-		loadContent('homepage.html');
-		// Check localStorage on startup
-		window.addEventListener('load', () => {
-			const selectedBook = localStorage.getItem('SELECTED_BOOK');
-			const selectedChapter = localStorage.getItem('SELECTED_CHAPTER');
-			const isEncoded = localStorage.getItem('CURRENT_CHAPTER_ENCODED');
 
-			// Set the SELECTED_BOOK and SELECTED_CHAPTER if they exist in localStorage
-			if (selectedBook) {
-				window.SELECTED_BOOK = selectedBook;
-			}
-			if (selectedChapter) {
-				window.SELECTED_CHAPTER = selectedChapter;
-			}
+                        window.scrollTo({
+                            top: 0,
+                            behavior: 'smooth' // Optional, for a smooth scrolling effect
+                        });
+                    }
+                })
+                .catch(error => console.error('Error loading content:', error));
+        }
 
-			// If the user is not a supporter, clear the localStorage variables
-			if (!window.SUPPORTER) {
-				localStorage.removeItem('SELECTED_BOOK');
-				localStorage.removeItem('SELECTED_CHAPTER');
-				localStorage.removeItem('CURRENT_CHAPTER_ENCODED');
-			} else if (window.SELECTED_CHAPTER) {
-				loadContent(selectedChapter, isEncoded === "true");
-			}
-		});
-	</script>
+        loadContent('homepage.html');
+        // Check localStorage on startup
+        window.addEventListener('load', () => {
+            const selectedBook = localStorage.getItem('SELECTED_BOOK');
+            const selectedChapter = localStorage.getItem('SELECTED_CHAPTER');
+            const isEncoded = localStorage.getItem('CURRENT_CHAPTER_ENCODED');
+
+            // Set the SELECTED_BOOK and SELECTED_CHAPTER if they exist in localStorage
+            if (selectedBook) {
+                window.SELECTED_BOOK = selectedBook;
+            }
+            if (selectedChapter) {
+                window.SELECTED_CHAPTER = selectedChapter;
+            }
+
+            // If the user is not a supporter, clear the localStorage variables
+            if (!window.SUPPORTER) {
+                localStorage.removeItem('SELECTED_BOOK');
+                localStorage.removeItem('SELECTED_CHAPTER');
+                localStorage.removeItem('CURRENT_CHAPTER_ENCODED');
+            } else if (window.SELECTED_CHAPTER) {
+                loadContent(selectedChapter, isEncoded === "true");
+            }
+        });
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-			// navigator highlighting
+            // navigator highlighting
             document.querySelectorAll('#navigation a').forEach(function (link) {
                 link.addEventListener('click', function () {
                     document.querySelectorAll('#navigation li').forEach(li => li.classList.remove('highlight'));
@@ -332,7 +353,7 @@
             const toggleNav = document.getElementById('toggleNav');
             const nav = document.getElementById('navigation');
             const content = document.getElementById('content');
-            
+
             toggleNav.addEventListener('click', () => {
                 nav.classList.toggle('show');
                 content.classList.toggle('shift');
@@ -355,55 +376,55 @@
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-			let startY;
-			let lastScrollTop = 0;
-			let isHeaderHidden = document.body.classList.contains('header-hidden');
+            let startY;
+            let lastScrollTop = 0;
+            let isHeaderHidden = document.body.classList.contains('header-hidden');
 
-			// Toggle the header visibility
-			function toggleHeader(show) {
-				document.body.classList.toggle('header-hidden', !show);
-				isHeaderHidden = !show;
-			}
+            // Toggle the header visibility
+            function toggleHeader(show) {
+                document.body.classList.toggle('header-hidden', !show);
+                isHeaderHidden = !show;
+            }
 
-			// Detect swipe gestures
-			window.addEventListener('touchstart', (e) => {
-				startY = e.touches[0].clientY;
-			});
+            // Detect swipe gestures
+            window.addEventListener('touchstart', (e) => {
+                startY = e.touches[0].clientY;
+            });
 
-			window.addEventListener('touchmove', (e) => {
-				if (!window.SUPPORTER || !window.SELECTED_CHAPTER) return;
-				
-				const moveY = e.touches[0].clientY;
-				const diffY = startY - moveY;
+            window.addEventListener('touchmove', (e) => {
+                if (!window.SUPPORTER || !window.SELECTED_CHAPTER) return;
 
-				if (diffY > 50 && !isHeaderHidden) {
-					// Swipe up: Hide header
-					toggleHeader(false);
-				} else if (diffY < -50 && isHeaderHidden) {
-					// Swipe down: Show header
-					toggleHeader(true);
-				}
-			});
+                const moveY = e.touches[0].clientY;
+                const diffY = startY - moveY;
 
-			// Detect scroll events
-			window.addEventListener('scroll', () => {
-				if (!window.SUPPORTER || !window.SELECTED_CHAPTER) return;
+                if (diffY > 50 && !isHeaderHidden) {
+                    // Swipe up: Hide header
+                    toggleHeader(false);
+                } else if (diffY < -50 && isHeaderHidden) {
+                    // Swipe down: Show header
+                    toggleHeader(true);
+                }
+            });
 
-				const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            // Detect scroll events
+            window.addEventListener('scroll', () => {
+                if (!window.SUPPORTER || !window.SELECTED_CHAPTER) return;
 
-				if (currentScrollTop > lastScrollTop && !isHeaderHidden) {
-					// Scrolling down: Hide header
-					toggleHeader(false);
-				} else if (currentScrollTop < lastScrollTop && isHeaderHidden) {
-					// Scrolling up: Show header
-					toggleHeader(true);
-				}
+                const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-				lastScrollTop = Math.max(currentScrollTop, 0); // Ensure the value doesn't go below 0
-			});
+                if (currentScrollTop > lastScrollTop && !isHeaderHidden) {
+                    // Scrolling down: Hide header
+                    toggleHeader(false);
+                } else if (currentScrollTop < lastScrollTop && isHeaderHidden) {
+                    // Scrolling up: Show header
+                    toggleHeader(true);
+                }
+
+                lastScrollTop = Math.max(currentScrollTop, 0); // Ensure the value doesn't go below 0
+            });
         });
-	</script>
-	<script>
+    </script>
+    <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Patreon login/logout
             const CLIENT_ID = 'DCmpYjAt5oF-1poN2N_hW22VXTuz8BNIOPk1yeoctffuvobAJCu8I7N7fKc1ngMp';
@@ -433,24 +454,26 @@
 
                 const username = token?.userInfo?.userName;
                 if (username) showPatreonUser(username);
-				
-				window.SUPPORTER = token?.userInfo?.supportsMe;
-				window.ENCRYPTION_PASSWORD = token?.encryption_password;
-                
-				if (username && !window.SUPPORTER) loadContent('not_a_supporter.html');
-				if (username && window.SUPPORTER) loadContent('homepage.html');
-				if (!username) loadContent('not_logged_in.html');
+
+                window.SUPPORTER = token?.userInfo?.supportsMe;
+                window.ENCRYPTION_PASSWORD = token?.encryption_password;
+
+                if (username && !window.SUPPORTER) loadContent('not_a_supporter.html');
+                if (username && window.SUPPORTER) loadContent('homepage.html');
+                if (!username) loadContent('not_logged_in.html');
             }
 
-            patreonLoginButton.addEventListener('click', () => window.location.href = PATREON_OAUTH_URL);
+            patreonLoginButton.addEventListener('click', function () {
+                window.location.href = PATREON_OAUTH_URL;
+            });
             patreonLogoutButton.addEventListener('click', () => {
                 localStorage.removeItem('patreon_token');
-				window.SUPPORTER = false;
-				window.ENCRYPTION_PASSWORD = "NO_PASSWORD";
+                window.SUPPORTER = false;
+                window.ENCRYPTION_PASSWORD = "NO_PASSWORD";
                 checkPatreonAuthentication();
             });
 
-			const url = new URL(window.location);
+            const url = new URL(window.location);
             const urlParams = new URLSearchParams(url.search);
             const authCode = urlParams.get('code');
             if (authCode) handlePatreonAuth({ code: authCode });
@@ -468,39 +491,41 @@
                 } else {
                     console.error('Error:', data);
                 }
-				urlParams.delete("code");
-				urlParams.delete("state");
-				window.history.replaceState({}, document.title, `${url.pathname}?${urlParams.toString()}`);
+                urlParams.delete("code");
+                urlParams.delete("state");
+                window.history.replaceState({}, document.title, `${url.pathname}?${urlParams.toString()}`);
             }
 
             checkPatreonAuthentication();
         });
     </script>
-	<script>
-		function changeBook(bookId, bookTitle) {
-			// Set localStorage variable
-			localStorage.setItem('SELECTED_BOOK', bookId);
-			
-			// Set window variable
-			window.SELECTED_BOOK = bookId;
-			
-			// Load navigation
-			loadNavigation(bookId + '_navigation.html');
-			document.getElementById("bookTitle").textContent = bookTitle;
-			document.getElementById("pageTitle").textContent = bookTitle;
-		}
-	</script>
+    <script>
+        function changeBook(bookId, bookTitle) {
+            // Set localStorage variable
+            localStorage.setItem('SELECTED_BOOK', bookId);
+
+            // Set window variable
+            window.SELECTED_BOOK = bookId;
+
+            // Load navigation
+            loadNavigation(bookId + '_navigation.html');
+            document.getElementById("bookTitle").textContent = bookTitle;
+            document.getElementById("pageTitle").textContent = bookTitle;
+        }
+    </script>
 </head>
+
 <body>
     <div id="header-bar">
         <button id="toggleNav">☰</button>
         <button id="home-button" onclick="loadContent('homepage.html');" style="margin-left: 10px; margin-right: 10px;">
-			<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-				<path d="M3 9l9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"></path>
-				<path d="M9 22V12h6v10"></path>
-			</svg>
-		</button>
-		<h1 id="bookTitle">Pokemon - Solo's Strange Journey</h1>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"></path>
+                <path d="M9 22V12h6v10"></path>
+            </svg>
+        </button>
+        <h1 id="bookTitle">Pokemon - Solo's Strange Journey</h1>
         <div id="patreon-section">
             <button id="patreon-login">Login with Patreon</button>
             <span id="patreon-username" style="display: none;"></span>
@@ -510,11 +535,12 @@
 
     <div id="book">
         <ul id="navigation" class="show">
-		
+
         </ul>
         <div id="content">
-            
+
         </div>
     </div>
 </body>
+
 </html>
