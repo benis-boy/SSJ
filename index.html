@@ -361,32 +361,24 @@
             let startY;
             let startX;
             let lastScrollTop = 0;
-            let isHeaderHidden = document.body.classList.contains('header-hidden');
-
-            // Toggle the header visibility
-            function toggleHeader(show) {
-                document.body.classList.toggle('header-hidden', !show);
-                isHeaderHidden = !show;
-            }
 
             // Detect swipe gestures
             window.addEventListener('touchstart', (e) => {
-                e.preventDefault();
                 startY = e.touches[0].clientY;
                 startX = e.touches[0].clientX;
-            }, { passive: false });
+            });
 
             window.addEventListener('touchmove', (e) => {
                 if (!window.SUPPORTER || !window.SELECTED_CHAPTER) return;
 
                 const moveY = e.touches[0].clientY;
                 const diffY = startY - moveY;
-                if (diffY > 50 && !isHeaderHidden) {
+                if (diffY > 50) {
                     // Swipe up: Hide header
-                    toggleHeader(false);
-                } else if (diffY < -50 && isHeaderHidden) {
+                    document.body.classList.add('header-hidden');
+                } else if (diffY < -50) {
                     // Swipe down: Show header
-                    toggleHeader(true);
+                    document.body.classList.remove('header-hidden');
                 }
 
                 let endX = e.changedTouches[0].clientX;
@@ -397,7 +389,7 @@
                     nav.classList.add('show');
                     content.classList.remove('shift');
                 }
-            }, { passive: false });
+            });
 
             // Detect scroll events
             window.addEventListener('scroll', () => {
