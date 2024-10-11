@@ -342,7 +342,6 @@
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // navigator highlighting
             document.querySelectorAll('#navigation a').forEach(function (link) {
                 link.addEventListener('click', function () {
                     document.querySelectorAll('#navigation li').forEach(li => li.classList.remove('highlight'));
@@ -359,24 +358,8 @@
                 content.classList.toggle('shift');
             });
 
-            // Swipe gestures
-            let startX;
-            document.addEventListener('touchstart', e => startX = e.touches[0].clientX);
-            document.addEventListener('touchend', e => {
-                let endX = e.changedTouches[0].clientX;
-                if (startX - endX > 100) {
-                    nav.classList.remove('show');
-                    content.classList.add('shift');
-                } else if (endX - startX > 100) {
-                    nav.classList.add('show');
-                    content.classList.remove('shift');
-                }
-            });
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
             let startY;
+            let startX;
             let lastScrollTop = 0;
             let isHeaderHidden = document.body.classList.contains('header-hidden');
 
@@ -390,6 +373,7 @@
             window.addEventListener('touchstart', (e) => {
                 e.preventDefault();
                 startY = e.touches[0].clientY;
+                startX = e.touches[0].clientX;
             }, { passive: false });
 
             window.addEventListener('touchmove', (e) => {
@@ -397,13 +381,21 @@
 
                 const moveY = e.touches[0].clientY;
                 const diffY = startY - moveY;
-
                 if (diffY > 50 && !isHeaderHidden) {
                     // Swipe up: Hide header
                     toggleHeader(false);
                 } else if (diffY < -50 && isHeaderHidden) {
                     // Swipe down: Show header
                     toggleHeader(true);
+                }
+
+                let endX = e.changedTouches[0].clientX;
+                if (startX - endX > 100) {
+                    nav.classList.remove('show');
+                    content.classList.add('shift');
+                } else if (endX - startX > 100) {
+                    nav.classList.add('show');
+                    content.classList.remove('shift');
                 }
             }, { passive: false });
 
