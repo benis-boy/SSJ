@@ -92,7 +92,9 @@ exports.handler = async (event, context) => {
       }
       const userInfo = await userDataResponse.json();
 
-      const userName = userInfo.data.attributes.vanity ?? token.userInfo.data.attributes.full_name;
+      console.log(token);
+
+      const userName = userInfo.data.attributes.vanity ?? userInfo.data.attributes.full_name ?? "CouldNotFindName";
       const memberData = userInfo.included.filter(something => something.type === "member");
       const myMemberData = memberData.find(memberInfo => memberInfo?.relationships?.campaign?.data?.id === "12346885");
       const filteredMembershipData = {

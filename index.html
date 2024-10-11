@@ -388,8 +388,9 @@
 
             // Detect swipe gestures
             window.addEventListener('touchstart', (e) => {
+                e.preventDefault();
                 startY = e.touches[0].clientY;
-            });
+            }, { passive: false });
 
             window.addEventListener('touchmove', (e) => {
                 if (!window.SUPPORTER || !window.SELECTED_CHAPTER) return;
@@ -404,7 +405,7 @@
                     // Swipe down: Show header
                     toggleHeader(true);
                 }
-            });
+            }, { passive: false });
 
             // Detect scroll events
             window.addEventListener('scroll', () => {
@@ -436,7 +437,7 @@
             const patreonUsernameSpan = document.getElementById('patreon-username');
 
             patreonLoginButton.addEventListener('click', function () {
-                window.open(PATREON_OAUTH_URL, "_self");
+                window.location.href = PATREON_OAUTH_URL;
             });
 
             function showPatreonUser(username) {
@@ -461,10 +462,6 @@
 
                 window.SUPPORTER = token?.userInfo?.supportsMe;
                 window.ENCRYPTION_PASSWORD = token?.encryption_password;
-
-                if (username && !window.SUPPORTER) loadContent('not_a_supporter.html');
-                if (username && window.SUPPORTER) loadContent('homepage.html');
-                if (!username) loadContent('not_logged_in.html');
             }
             patreonLogoutButton.addEventListener('click', () => {
                 localStorage.removeItem('patreon_token');
