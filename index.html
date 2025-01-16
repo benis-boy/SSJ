@@ -163,6 +163,7 @@
         #toggleNav,
         #patreon-login,
         #patreon-logout,
+		#patreon-link,
         #home-button {
             background-color: #ff424d;
             border: none;
@@ -170,6 +171,8 @@
             padding: 10px;
             cursor: pointer;
             font-size: 16px;
+			margin-top: auto;
+			margin-bottom: auto;
         }
 
         @media screen and (max-device-width: 768px) {
@@ -377,7 +380,7 @@
                 const diffY = startY - moveY;
                 if (diffY > 50) {
                     document.body.classList.add('header-hidden');
-                } else if (diffY < -50) {
+                } else if (diffY < -250) {
                     document.body.classList.remove('header-hidden');
                 }
 
@@ -511,6 +514,9 @@
                 <path d="M9 22V12h6v10"></path>
             </svg>
         </button>
+		<button id="patreon-link" onclick="window.open('https://patreon.com/BenisBoy16', '_blank');" style="margin-left: 10px; margin-right: 10px; padding: 2px;">
+			<img src="pfp_patreon.png" alt="Patreon" width="36" height="36" style="vertical-align: middle;">
+		</button>
         <h1 id="bookTitle">Pokemon - Solo's Strange Journey</h1>
         <div id="patreon-section">
             <button id="patreon-login">Login with Patreon</button>
