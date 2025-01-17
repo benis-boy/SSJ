@@ -320,10 +320,21 @@
 		}
 	</style>
 	<script>
+		function updateDarkModeSwitchState() {
+			const darkModeEnabled = localStorage.getItem('DARK_MODE') === 'true';
+			const darkModeSwitch = document.getElementById('darkModeSwitch');
+			
+			// Ensure the switch exists before updating
+			if (darkModeSwitch) {
+				darkModeSwitch.checked = darkModeEnabled;
+			}
+		}
+		
 		// On page load, check the localStorage for dark mode preference
 		document.addEventListener('DOMContentLoaded', () => {
 			const darkModeEnabled = localStorage.getItem('DARK_MODE') === 'true';
 			updateDarkMode(darkModeEnabled);
+			updateDarkModeSwitchState();
 		});
 		
 		// Global function to toggle dark mode
@@ -443,6 +454,8 @@
                             behavior: 'smooth' // Optional, for a smooth scrolling effect
                         });
                     }
+					
+					updateDarkModeSwitchState();
                 })
                 .catch(error => console.error('Error loading content:', error));
         }

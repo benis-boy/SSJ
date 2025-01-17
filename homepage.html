@@ -5,8 +5,7 @@
 		<div id="darkModeToggleWrapper" style="display: flex; align-items: center; gap: 10px; margin: 10px;">
 			<span id="lightModeLabel">Light Mode</span>
 			<label class="toggle-switch">
-				<input type="checkbox" id="darkModeSwitch" onclick="toggleDarkMode()" 
-					${localStorage.getItem('DARK_MODE') === 'true' ? 'checked' : ''} />
+				<input type="checkbox" id="darkModeSwitch" onclick="toggleDarkMode()" />
 				<span class="slider"></span>
 			</label>
 			<span id="darkModeLabel">Dark Mode</span>
