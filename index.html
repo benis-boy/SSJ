@@ -159,6 +159,14 @@
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
             /* Enhanced shadow on hover */
         }
+		
+		#homepage-container {
+			color: #333;
+		}
+		
+		#homepage-container p {
+			color: #777;
+		}
 
         #toggleNav,
         #patreon-login,
@@ -179,6 +187,10 @@
             #toggleNav {
                 display: none;
             }
+			
+			#headerAndDarkModeToggle {
+				flex-direction: column;
+			}
 
             #content {
                 margin-left: 0;
@@ -215,6 +227,120 @@
             }
         }
     </style>
+	<style>
+		.toggle-switch {
+			position: relative;
+			display: inline-block;
+			width: 50px;
+			height: 24px;
+		}
+
+		.toggle-switch input {
+			opacity: 0;
+			width: 0;
+			height: 0;
+		}
+
+		.slider {
+			position: absolute;
+			cursor: pointer;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: #ccc;
+			transition: 0.4s;
+			border-radius: 24px;
+		}
+
+		.slider:before {
+			position: absolute;
+			content: "";
+			height: 20px;
+			width: 20px;
+			left: 2px;
+			bottom: 2px;
+			background-color: white;
+			transition: 0.4s;
+			border-radius: 50%;
+		}
+
+		input:checked + .slider {
+			background-color: #3498db;
+		}
+
+		input:checked + .slider:before {
+			transform: translateX(26px);
+		}
+
+		#darkModeToggleWrapper span {
+			font-size: 16px;
+			font-family: Arial, sans-serif;
+		}
+	
+		body.dark-mode {
+			background-color: #121212;
+			color: #ffffff;
+		}
+		
+		body.dark-mode #homepage-container p {
+			color: #ffffff;
+		}
+
+		body.dark-mode #navigation {
+			background-color: #1f1f1f;
+			border-right: 2px solid #555;
+		}
+
+		body.dark-mode #content {
+			background-color: #1f1f1f;
+			color: #ffffff;
+		}
+
+		body.dark-mode #content p {
+			color: #ffffff;
+		}
+
+		body.dark-mode a {
+			color: #58a6ff;
+		}
+
+		body.dark-mode a:hover {
+			background-color: #333333;
+		}
+
+		body.dark-mode #header-bar {
+			background-color: #1f1f1f;
+			color: #ffffff;
+		}
+
+		body.dark-mode button {
+			background-color: #333333;
+			color: #ffffff;
+		}
+	</style>
+	<script>
+		// On page load, check the localStorage for dark mode preference
+		document.addEventListener('DOMContentLoaded', () => {
+			const darkModeEnabled = localStorage.getItem('DARK_MODE') === 'true';
+			updateDarkMode(darkModeEnabled);
+		});
+		
+		// Global function to toggle dark mode
+		function toggleDarkMode() {
+			const isDarkMode = document.body.classList.toggle('dark-mode');
+			localStorage.setItem('DARK_MODE', isDarkMode);
+		}
+
+		// Function to update the dark mode based on the state
+		function updateDarkMode(isDarkMode) {
+			if (isDarkMode) {
+				document.body.classList.add('dark-mode');
+			} else {
+				document.body.classList.remove('dark-mode');
+			}
+		}
+	</script>
     <script>
         async function decryptString(encryptedText, password) {
             const textBytes = Uint8Array.from(atob(encryptedText), c => c.charCodeAt(0));
@@ -526,11 +652,11 @@
     </div>
 
     <div id="book">
-        <ul id="navigation" class="show">
+        <ul id="navigation" class="show" style="z-index: 9999;">
 
         </ul>
         <div id="content">
-
+		
         </div>
     </div>
 </body>

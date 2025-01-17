@@ -1,5 +1,17 @@
-<div class="homepage-container" style="padding: 20px; font-family: 'Arial', sans-serif; color: #333;">
-    <h1 style="font-size: 2em; margin-bottom: 20px;">BenisBoy's Library</h1>
+<div class="homepage-container" style="padding: 20px; font-family: 'Arial', sans-serif;">
+	
+    <div style="display: flex; justify-content: space-between; align-items: center; margin: 10px;" id="headerAndDarkModeToggle">
+		<h1 style="font-size: 2em; margin-bottom: 20px;">BenisBoy's Library</h1>
+		<div id="darkModeToggleWrapper" style="display: flex; align-items: center; gap: 10px; margin: 10px;">
+			<span id="lightModeLabel">Light Mode</span>
+			<label class="toggle-switch">
+				<input type="checkbox" id="darkModeSwitch" onclick="toggleDarkMode()" 
+					${localStorage.getItem('DARK_MODE') === 'true' ? 'checked' : ''} />
+				<span class="slider"></span>
+			</label>
+			<span id="darkModeLabel">Dark Mode</span>
+		</div>
+	</div>
 
     <div class="library" style="display: flex; gap: 20px;">
 	
@@ -10,8 +22,8 @@
 				loading="lazy">
             <div class="item-details" style="padding: 10px; text-align: center;">
                 <h2 style="font-size: 1.5em; margin: 10px 0; font-weight: bold;">Pokemon - Solo's Strange Journey</h2>
-                <p style="font-size: 1em; color: #777;">8 Volumes, 475.000 Words</p>
-                <p style="font-size: 1em; color: #777;">Latest update on 16 Jan 2025</p>
+                <p style="font-size: 1em;">8 Volumes, 475.000 Words</p>
+                <p style="font-size: 1em;">Latest update on 16 Jan 2025</p>
             </div>
         </div>
 
@@ -23,7 +35,7 @@
 				loading="lazy">
             <div class="item-details" style="padding: 10px; text-align: center;">
                 <h2 style="font-size: 1.5em; margin: 10px 0; font-weight: bold;">Haunted House of a Wicked Witch</h2>
-                <p style="font-size: 1em; color: #777;">Coming soon</p>
+                <p style="font-size: 1em;">Coming soon</p>
             </div>
         </div>
 
