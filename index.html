@@ -1,676 +1,716 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title id="pageTitle">Pokemon - Solo's Strange Journey</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-            color: #333;
-            overflow-x: hidden;
-            --header-height: 50px;
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        margin: 0;
+        padding: 0;
+        color: #333;
+        overflow-x: hidden;
+        --header-height: 50px;
+      }
+
+      #book {
+        display: flex;
+        max-width: 100vw;
+        margin: 0;
+        padding: 0;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+      }
+
+      #navigation {
+        list-style-type: none;
+        margin: 0;
+        width: 250px;
+        padding: 20px;
+        border-right: 2px solid #3498db;
+        background-color: #fff;
+        height: calc(100vh - 40px - var(--header-height));
+        overflow-y: auto;
+        position: fixed;
+        left: 0;
+        top: var(--header-height);
+        transform: translateX(-100%);
+        transition: transform 0.3s ease, top 0.3s ease;
+      }
+
+      #navigation.show {
+        transform: translateX(0);
+      }
+
+      #navigation ul {
+        padding: 0;
+        margin: 0;
+      }
+
+      #navigation li {
+        list-style-type: none;
+        margin: 10px 0;
+      }
+
+      #navigation a {
+        text-decoration: none;
+        color: #3498db;
+        display: block;
+        padding: 10px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+      }
+
+      #navigation a:hover {
+        background-color: #ecf0f1;
+      }
+
+      .highlight {
+        background-color: #bbdfff;
+        border-radius: 5px;
+      }
+
+      #content {
+        flex: 1;
+        padding: 40px;
+        padding-top: 10px;
+        min-height: calc(100vh - 50px - var(--header-height));
+        background-color: #fff;
+        margin-left: 280px;
+        margin-top: var(--header-height);
+        transition: margin-left 0.3s ease, margin-top 0.3s ease;
+      }
+
+      /* Styles for paragraphs inside the content area */
+      #content p {
+        margin: 1em 0;
+        line-height: 1.6;
+        font-size: 1.1em;
+        color: #333;
+        font-family: Arial, sans-serif;
+        text-align: justify;
+        padding: 0 10px;
+      }
+
+      #content.shift {
+        margin-left: 0;
+      }
+
+      #bookTitle {
+        flex-grow: 1;
+        text-align: center;
+        margin: auto 0;
+        color: #ebebeb;
+      }
+
+      #header-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: calc(100vw - 20px);
+        height: var(--header-height);
+        z-index: 1000;
+        padding: 0 10px;
+        background-color: #333;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: transform 0.3s ease;
+      }
+
+      /* When the header is hidden */
+      .header-hidden #header-bar {
+        transform: translateY(-100%);
+        /* Moves header out of view */
+      }
+
+      .header-hidden #navigation {
+        top: 0;
+        /* Adjusts navigator to top */
+        height: calc(100vh - 40px);
+        /* Expands navigator to full height */
+      }
+
+      .header-hidden #content {
+        margin-top: 0;
+        /* Moves content to the top */
+        min-height: calc(100vh - 50px);
+      }
+
+      #patreon-username {
+        margin-right: 10px;
+        font-weight: bold;
+        font-size: 16px;
+      }
+
+      #patreon-section {
+        display: flex;
+        align-items: center;
+      }
+
+      .book-item:hover {
+        transform: scale(1.02);
+        /* Slightly scale up the item on hover */
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        /* Enhanced shadow on hover */
+      }
+
+      #homepage-container {
+        color: #333;
+      }
+
+      #homepage-container p {
+        color: #777;
+      }
+
+      #toggleNav,
+      #patreon-login,
+      #patreon-logout,
+      #patreon-link,
+      #home-button {
+        background-color: #ff424d;
+        border: none;
+        color: white;
+        padding: 10px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: auto;
+        margin-bottom: auto;
+      }
+
+      @media screen and (max-device-width: 768px) {
+        #toggleNav {
+          display: none;
         }
 
-        #book {
-            display: flex;
-            max-width: 100vw;
-            margin: 0;
-            padding: 0;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
-
-        #navigation {
-            list-style-type: none;
-            margin: 0;
-            width: 250px;
-            padding: 20px;
-            border-right: 2px solid #3498db;
-            background-color: #fff;
-            height: calc(100vh - 40px - var(--header-height));
-            overflow-y: auto;
-            position: fixed;
-            left: 0;
-            top: var(--header-height);
-            transform: translateX(-100%);
-            transition: transform 0.3s ease, top 0.3s ease;
-        }
-
-        #navigation.show {
-            transform: translateX(0);
-        }
-
-        #navigation ul {
-            padding: 0;
-            margin: 0;
-        }
-
-        #navigation li {
-            list-style-type: none;
-            margin: 10px 0;
-        }
-
-        #navigation a {
-            text-decoration: none;
-            color: #3498db;
-            display: block;
-            padding: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        #navigation a:hover {
-            background-color: #ecf0f1;
-        }
-
-        .highlight {
-            background-color: #bbdfff;
-            border-radius: 5px;
+        #headerAndDarkModeToggle {
+          flex-direction: column;
         }
 
         #content {
-            flex: 1;
-            padding: 40px;
-            padding-top: 10px;
-            min-height: calc(100vh - 50px - var(--header-height));
-            background-color: #fff;
-            margin-left: 280px;
-            margin-top: var(--header-height);
-            transition: margin-left 0.3s ease, margin-top 0.3s ease;
+          margin-left: 0;
+          padding: 10px;
         }
 
-        /* Styles for paragraphs inside the content area */
-        #content p {
-            margin: 1em 0;
-            line-height: 1.6;
-            font-size: 1.1em;
-            color: #333;
-            font-family: Arial, sans-serif;
-            text-align: justify;
-            padding: 0 10px;
-        }
-
-        #content.shift {
-            margin-left: 0;
+        body {
+          --header-height: 80px;
         }
 
         #bookTitle {
-            flex-grow: 1;
-            text-align: center;
-            margin: auto 0;
-            color: #ebebeb;
+          font-size: 14px;
         }
 
-        #header-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: calc(100vw - 20px);
-            height: var(--header-height);
-            z-index: 1000;
-            padding: 0 10px;
-            background-color: #333;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: transform 0.3s ease;
+        .library {
+          flex-direction: column;
+          /* Align items vertically */
+          gap: 15px;
         }
 
-        /* When the header is hidden */
-        .header-hidden #header-bar {
-            transform: translateY(-100%);
-            /* Moves header out of view */
+        .book-item {
+          width: 100%;
+          /* Full width on mobile */
         }
 
-        .header-hidden #navigation {
-            top: 0;
-            /* Adjusts navigator to top */
-            height: calc(100vh - 40px);
-            /* Expands navigator to full height */
+        .book-item img {
+          width: 100%;
+          /* Ensure images are responsive */
+          height: auto;
         }
 
-        .header-hidden #content {
-            margin-top: 0;
-            /* Moves content to the top */
-            min-height: calc(100vh - 50px);
+        .item-details {
+          padding: 15px;
         }
-
-        #patreon-username {
-            margin-right: 10px;
-            font-weight: bold;
-            font-size: 16px;
-        }
-
-        #patreon-section {
-            display: flex;
-            align-items: center;
-        }
-
-        .book-item:hover {
-            transform: scale(1.02);
-            /* Slightly scale up the item on hover */
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-            /* Enhanced shadow on hover */
-        }
-		
-		#homepage-container {
-			color: #333;
-		}
-		
-		#homepage-container p {
-			color: #777;
-		}
-
-        #toggleNav,
-        #patreon-login,
-        #patreon-logout,
-		#patreon-link,
-        #home-button {
-            background-color: #ff424d;
-            border: none;
-            color: white;
-            padding: 10px;
-            cursor: pointer;
-            font-size: 16px;
-			margin-top: auto;
-			margin-bottom: auto;
-        }
-
-        @media screen and (max-device-width: 768px) {
-            #toggleNav {
-                display: none;
-            }
-			
-			#headerAndDarkModeToggle {
-				flex-direction: column;
-			}
-
-            #content {
-                margin-left: 0;
-                padding: 10px;
-            }
-
-            body {
-                --header-height: 80px;
-            }
-
-            #bookTitle {
-                font-size: 14px;
-            }
-
-            .library {
-                flex-direction: column;
-                /* Align items vertically */
-                gap: 15px;
-            }
-
-            .book-item {
-                width: 100%;
-                /* Full width on mobile */
-            }
-
-            .book-item img {
-                width: 100%;
-                /* Ensure images are responsive */
-                height: auto;
-            }
-
-            .item-details {
-                padding: 15px;
-            }
-        }
+      }
     </style>
-	<style>
-		.toggle-switch {
-			position: relative;
-			display: inline-block;
-			width: 50px;
-			height: 24px;
-		}
+    <style>
+      .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 24px;
+      }
 
-		.toggle-switch input {
-			opacity: 0;
-			width: 0;
-			height: 0;
-		}
+      .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
 
-		.slider {
-			position: absolute;
-			cursor: pointer;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			background-color: #ccc;
-			transition: 0.4s;
-			border-radius: 24px;
-		}
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: 0.4s;
+        border-radius: 24px;
+      }
 
-		.slider:before {
-			position: absolute;
-			content: "";
-			height: 20px;
-			width: 20px;
-			left: 2px;
-			bottom: 2px;
-			background-color: white;
-			transition: 0.4s;
-			border-radius: 50%;
-		}
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 20px;
+        width: 20px;
+        left: 2px;
+        bottom: 2px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+      }
 
-		input:checked + .slider {
-			background-color: #3498db;
-		}
+      input:checked + .slider {
+        background-color: #3498db;
+      }
 
-		input:checked + .slider:before {
-			transform: translateX(26px);
-		}
+      input:checked + .slider:before {
+        transform: translateX(26px);
+      }
 
-		#darkModeToggleWrapper span {
-			font-size: 16px;
-			font-family: Arial, sans-serif;
-		}
-	
-		body.dark-mode {
-			background-color: #1f1f1f;
-			color: #ffffff;
-		}
-		
-		body.dark-mode #homepage-container p {
-			color: #ffffff;
-		}
+      #darkModeToggleWrapper span {
+        font-size: 16px;
+        font-family: Arial, sans-serif;
+      }
 
-		body.dark-mode #navigation {
-			background-color: #1f1f1f;
-			border-right: 2px solid #555;
-		}
+      body.dark-mode {
+        background-color: #1f1f1f;
+        color: #ffffff;
+      }
 
-		body.dark-mode #content {
-			background-color: #1f1f1f;
-			color: #ffffff;
-		}
+      body.dark-mode #homepage-container p {
+        color: #ffffff;
+      }
 
-		body.dark-mode #content p {
-			color: #ffffff;
-		}
+      body.dark-mode #navigation {
+        background-color: #1f1f1f;
+        border-right: 2px solid #555;
+      }
 
-		body.dark-mode a {
-			color: #58a6ff;
-		}
+      body.dark-mode #content {
+        background-color: #1f1f1f;
+        color: #ffffff;
+      }
 
-		body.dark-mode a:hover {
-			background-color: #333333;
-		}
+      body.dark-mode #content p {
+        color: #ffffff;
+      }
 
-		body.dark-mode #header-bar {
-			background-color: #1f1f1f;
-			color: #ffffff;
-		}
+      body.dark-mode a {
+        color: #58a6ff;
+      }
 
-		body.dark-mode button {
-			background-color: #333333;
-			color: #ffffff;
-		}
-	</style>
-	<script>
-		function updateDarkModeSwitchState() {
-			const darkModeEnabled = localStorage.getItem('DARK_MODE') === 'true';
-			const darkModeSwitch = document.getElementById('darkModeSwitch');
-			
-			// Ensure the switch exists before updating
-			if (darkModeSwitch) {
-				darkModeSwitch.checked = darkModeEnabled;
-			}
-		}
-		
-		// On page load, check the localStorage for dark mode preference
-		document.addEventListener('DOMContentLoaded', () => {
-			const darkModeEnabled = localStorage.getItem('DARK_MODE') === 'true';
-			updateDarkMode(darkModeEnabled);
-			updateDarkModeSwitchState();
-		});
-		
-		// Global function to toggle dark mode
-		function toggleDarkMode() {
-			const isDarkMode = document.body.classList.toggle('dark-mode');
-			localStorage.setItem('DARK_MODE', isDarkMode);
-		}
+      body.dark-mode a:hover {
+        background-color: #333333;
+      }
 
-		// Function to update the dark mode based on the state
-		function updateDarkMode(isDarkMode) {
-			if (isDarkMode) {
-				document.body.classList.add('dark-mode');
-			} else {
-				document.body.classList.remove('dark-mode');
-			}
-		}
-	</script>
+      body.dark-mode #header-bar {
+        background-color: #1f1f1f;
+        color: #ffffff;
+      }
+
+      body.dark-mode button {
+        background-color: #333333;
+        color: #ffffff;
+      }
+    </style>
+
     <script>
-        async function decryptString(encryptedText, password) {
-            const textBytes = Uint8Array.from(atob(encryptedText), c => c.charCodeAt(0));
+      window.location.href = "https://benis-boy.github.io/library/";
+    </script>
 
-            // Extract IV and ciphertext from the encrypted string
-            const iv = textBytes.slice(0, 16);  // First 16 bytes are the IV
-            const ciphertext = textBytes.slice(16);  // The rest is the encrypted data
+    <script>
+      function updateDarkModeSwitchState() {
+        const darkModeEnabled = localStorage.getItem("DARK_MODE") === "true";
+        const darkModeSwitch = document.getElementById("darkModeSwitch");
 
-            // Derive a key from the password using PBKDF2
-            const enc = new TextEncoder();
-            const keyMaterial = await window.crypto.subtle.importKey(
-                "raw",
-                enc.encode(password),
-                "PBKDF2",
-                false,
-                ["deriveKey"]
-            );
-
-            const key = await window.crypto.subtle.deriveKey(
-                {
-                    name: "PBKDF2",
-                    salt: enc.encode("salt_"),  // Ensure the salt matches the one in Python
-                    iterations: 100000,
-                    hash: "SHA-256"
-                },
-                keyMaterial,
-                {
-                    name: "AES-CBC",
-                    length: 256
-                },
-                false,
-                ["decrypt"]
-            );
-
-            // Decrypt the data
-            const decrypted = await window.crypto.subtle.decrypt(
-                { name: "AES-CBC", iv: iv },
-                key,
-                ciphertext
-            );
-
-            const decoder = new TextDecoder();
-            return decoder.decode(decrypted);
+        // Ensure the switch exists before updating
+        if (darkModeSwitch) {
+          darkModeSwitch.checked = darkModeEnabled;
         }
+      }
+
+      // On page load, check the localStorage for dark mode preference
+      document.addEventListener("DOMContentLoaded", () => {
+        const darkModeEnabled = localStorage.getItem("DARK_MODE") === "true";
+        updateDarkMode(darkModeEnabled);
+        updateDarkModeSwitchState();
+      });
+
+      // Global function to toggle dark mode
+      function toggleDarkMode() {
+        const isDarkMode = document.body.classList.toggle("dark-mode");
+        localStorage.setItem("DARK_MODE", isDarkMode);
+      }
+
+      // Function to update the dark mode based on the state
+      function updateDarkMode(isDarkMode) {
+        if (isDarkMode) {
+          document.body.classList.add("dark-mode");
+        } else {
+          document.body.classList.remove("dark-mode");
+        }
+      }
     </script>
     <script>
-        // The file to load at startup. You can change this in the future.
-        let navigationFile = "PSSJ_navigation.html";
+      async function decryptString(encryptedText, password) {
+        const textBytes = Uint8Array.from(atob(encryptedText), (c) =>
+          c.charCodeAt(0)
+        );
 
-        // Function to load navigation from an external HTML file
-        function loadNavigation(file) {
-            fetch(file)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to load navigation');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    document.getElementById('navigation').innerHTML = data;
-                })
-                .catch(error => console.error('Error loading navigation:', error));
+        // Extract IV and ciphertext from the encrypted string
+        const iv = textBytes.slice(0, 16); // First 16 bytes are the IV
+        const ciphertext = textBytes.slice(16); // The rest is the encrypted data
+
+        // Derive a key from the password using PBKDF2
+        const enc = new TextEncoder();
+        const keyMaterial = await window.crypto.subtle.importKey(
+          "raw",
+          enc.encode(password),
+          "PBKDF2",
+          false,
+          ["deriveKey"]
+        );
+
+        const key = await window.crypto.subtle.deriveKey(
+          {
+            name: "PBKDF2",
+            salt: enc.encode("salt_"), // Ensure the salt matches the one in Python
+            iterations: 100000,
+            hash: "SHA-256",
+          },
+          keyMaterial,
+          {
+            name: "AES-CBC",
+            length: 256,
+          },
+          false,
+          ["decrypt"]
+        );
+
+        // Decrypt the data
+        const decrypted = await window.crypto.subtle.decrypt(
+          { name: "AES-CBC", iv: iv },
+          key,
+          ciphertext
+        );
+
+        const decoder = new TextDecoder();
+        return decoder.decode(decrypted);
+      }
+    </script>
+    <script>
+      // The file to load at startup. You can change this in the future.
+      let navigationFile = "PSSJ_navigation.html";
+
+      // Function to load navigation from an external HTML file
+      function loadNavigation(file) {
+        fetch(file)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Failed to load navigation");
+            }
+            return response.text();
+          })
+          .then((data) => {
+            document.getElementById("navigation").innerHTML = data;
+          })
+          .catch((error) => console.error("Error loading navigation:", error));
+      }
+
+      // Load the initial navigation file
+      loadNavigation(navigationFile);
+
+      function loadContent(url, is_encrypted = false) {
+        if (!window.SUPPORTER && is_encrypted) {
+          document.body.classList.remove("header-hidden");
+          return loadContent("not_a_supporter.html");
         }
 
-        // Load the initial navigation file
-        loadNavigation(navigationFile);
+        fetch(url)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.text();
+          })
+          .then((encrypted) => {
+            if (!is_encrypted) return encrypted;
+            const pw = window.ENCRYPTION_PASSWORD ?? "NO_PASSWORD";
+            if (pw === "NO_PASSWORD")
+              console.error(
+                "You aren't using the server-provided passphrase to decode this content!"
+              );
+            return decryptString(encrypted, pw);
+          })
+          .then((data) => {
+            document.getElementById("content").innerHTML = data;
 
-        function loadContent(url, is_encrypted = false) {
-            if (!window.SUPPORTER && is_encrypted) {
-                document.body.classList.remove('header-hidden');
-                return loadContent('not_a_supporter.html');
+            if (url.includes("PSSJ\\")) {
+              // Store the SELECTED_BOOK and SELECTED_CHAPTER in localStorage
+              window.SELECTED_BOOK = "PSSJ"; // Set the book name here
+              window.SELECTED_CHAPTER = url; // Set the chapter based on the URL
+              localStorage.setItem("SELECTED_BOOK", window.SELECTED_BOOK);
+              localStorage.setItem("SELECTED_CHAPTER", window.SELECTED_CHAPTER);
+              localStorage.setItem("CURRENT_CHAPTER_ENCODED", is_encrypted);
+
+              window.scrollTo({
+                top: 0,
+                behavior: "smooth", // Optional, for a smooth scrolling effect
+              });
             }
 
-            fetch(url)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.text();
-                })
-                .then(encrypted => {
-                    if (!is_encrypted) return encrypted;
-                    const pw = window.ENCRYPTION_PASSWORD ?? "NO_PASSWORD"
-                    if (pw === "NO_PASSWORD") console.error("You aren't using the server-provided passphrase to decode this content!")
-                    return decryptString(encrypted, pw);
-                })
-                .then(data => {
-                    document.getElementById('content').innerHTML = data;
+            updateDarkModeSwitchState();
+          })
+          .catch((error) => console.error("Error loading content:", error));
+      }
 
-                    if (url.includes("PSSJ\\")) {
-                        // Store the SELECTED_BOOK and SELECTED_CHAPTER in localStorage
-                        window.SELECTED_BOOK = "PSSJ"; // Set the book name here
-                        window.SELECTED_CHAPTER = url; // Set the chapter based on the URL
-                        localStorage.setItem('SELECTED_BOOK', window.SELECTED_BOOK);
-                        localStorage.setItem('SELECTED_CHAPTER', window.SELECTED_CHAPTER);
-                        localStorage.setItem('CURRENT_CHAPTER_ENCODED', is_encrypted);
+      loadContent("homepage.html");
+      // Check localStorage on startup
+      window.addEventListener("load", () => {
+        const selectedBook = localStorage.getItem("SELECTED_BOOK");
+        const selectedChapter = localStorage.getItem("SELECTED_CHAPTER");
+        const isEncoded = localStorage.getItem("CURRENT_CHAPTER_ENCODED");
 
-                        window.scrollTo({
-                            top: 0,
-                            behavior: 'smooth' // Optional, for a smooth scrolling effect
-                        });
-                    }
-					
-					updateDarkModeSwitchState();
-                })
-                .catch(error => console.error('Error loading content:', error));
+        // Set the SELECTED_BOOK and SELECTED_CHAPTER if they exist in localStorage
+        if (selectedBook) {
+          window.SELECTED_BOOK = selectedBook;
+        }
+        if (selectedChapter) {
+          window.SELECTED_CHAPTER = selectedChapter;
         }
 
-        loadContent('homepage.html');
-        // Check localStorage on startup
-        window.addEventListener('load', () => {
-            const selectedBook = localStorage.getItem('SELECTED_BOOK');
-            const selectedChapter = localStorage.getItem('SELECTED_CHAPTER');
-            const isEncoded = localStorage.getItem('CURRENT_CHAPTER_ENCODED');
-
-            // Set the SELECTED_BOOK and SELECTED_CHAPTER if they exist in localStorage
-            if (selectedBook) {
-                window.SELECTED_BOOK = selectedBook;
-            }
-            if (selectedChapter) {
-                window.SELECTED_CHAPTER = selectedChapter;
-            }
-
-            // If the user is not a supporter, clear the localStorage variables
-            if (!window.SUPPORTER) {
-                localStorage.removeItem('SELECTED_BOOK');
-                localStorage.removeItem('SELECTED_CHAPTER');
-                localStorage.removeItem('CURRENT_CHAPTER_ENCODED');
-            } else if (window.SELECTED_CHAPTER) {
-                loadContent(selectedChapter, isEncoded === "true");
-            }
+        // If the user is not a supporter, clear the localStorage variables
+        if (!window.SUPPORTER) {
+          localStorage.removeItem("SELECTED_BOOK");
+          localStorage.removeItem("SELECTED_CHAPTER");
+          localStorage.removeItem("CURRENT_CHAPTER_ENCODED");
+        } else if (window.SELECTED_CHAPTER) {
+          loadContent(selectedChapter, isEncoded === "true");
+        }
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll("#navigation a").forEach(function (link) {
+          link.addEventListener("click", function () {
+            document
+              .querySelectorAll("#navigation li")
+              .forEach((li) => li.classList.remove("highlight"));
+            this.closest("li").classList.add("highlight");
+          });
         });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('#navigation a').forEach(function (link) {
-                link.addEventListener('click', function () {
-                    document.querySelectorAll('#navigation li').forEach(li => li.classList.remove('highlight'));
-                    this.closest('li').classList.add('highlight');
-                });
-            });
 
-            const toggleNav = document.getElementById('toggleNav');
-            const nav = document.getElementById('navigation');
-            const content = document.getElementById('content');
+        const toggleNav = document.getElementById("toggleNav");
+        const nav = document.getElementById("navigation");
+        const content = document.getElementById("content");
 
-            toggleNav.addEventListener('click', () => {
-                nav.classList.toggle('show');
-                content.classList.toggle('shift');
-            });
-
-            let startY;
-            let startX;
-            let lastScrollTop = 0;
-
-            // Detect swipe gestures
-            window.addEventListener('touchstart', (e) => {
-                startY = e.touches[0].clientY;
-                startX = e.touches[0].clientX;
-            });
-
-            window.addEventListener('touchmove', (e) => {
-
-                const moveY = e.touches[0].clientY;
-                const diffY = startY - moveY;
-                if (diffY > 50) {
-                    document.body.classList.add('header-hidden');
-                } else if (diffY < -250) {
-                    document.body.classList.remove('header-hidden');
-                }
-
-                let endX = e.changedTouches[0].clientX;
-                if (startX - endX > 100) {
-                    nav.classList.remove('show');
-                    content.classList.add('shift');
-                } else if (endX - startX > 100) {
-                    nav.classList.add('show');
-                    content.classList.remove('shift');
-                }
-            });
-
-            // Detect scroll events
-            window.addEventListener('scroll', () => {
-                if (!window.SUPPORTER || !window.SELECTED_CHAPTER) return;
-
-                const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-                if (currentScrollTop > lastScrollTop) {
-                    document.body.classList.add('header-hidden');
-                } else if (currentScrollTop < lastScrollTop) {
-                    document.body.classList.remove('header-hidden');
-                }
-
-                lastScrollTop = Math.max(currentScrollTop, 0); // Ensure the value doesn't go below 0
-            });
+        toggleNav.addEventListener("click", () => {
+          nav.classList.toggle("show");
+          content.classList.toggle("shift");
         });
+
+        let startY;
+        let startX;
+        let lastScrollTop = 0;
+
+        // Detect swipe gestures
+        window.addEventListener("touchstart", (e) => {
+          startY = e.touches[0].clientY;
+          startX = e.touches[0].clientX;
+        });
+
+        window.addEventListener("touchmove", (e) => {
+          const moveY = e.touches[0].clientY;
+          const diffY = startY - moveY;
+          if (diffY > 50) {
+            document.body.classList.add("header-hidden");
+          } else if (diffY < -250) {
+            document.body.classList.remove("header-hidden");
+          }
+
+          let endX = e.changedTouches[0].clientX;
+          if (startX - endX > 100) {
+            nav.classList.remove("show");
+            content.classList.add("shift");
+          } else if (endX - startX > 100) {
+            nav.classList.add("show");
+            content.classList.remove("shift");
+          }
+        });
+
+        // Detect scroll events
+        window.addEventListener("scroll", () => {
+          if (!window.SUPPORTER || !window.SELECTED_CHAPTER) return;
+
+          const currentScrollTop =
+            window.pageYOffset || document.documentElement.scrollTop;
+
+          if (currentScrollTop > lastScrollTop) {
+            document.body.classList.add("header-hidden");
+          } else if (currentScrollTop < lastScrollTop) {
+            document.body.classList.remove("header-hidden");
+          }
+
+          lastScrollTop = Math.max(currentScrollTop, 0); // Ensure the value doesn't go below 0
+        });
+      });
     </script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Patreon login/logout
-            const CLIENT_ID = 'DCmpYjAt5oF-1poN2N_hW22VXTuz8BNIOPk1yeoctffuvobAJCu8I7N7fKc1ngMp';
-            const REDIRECT_URI = "https://benis-boy.github.io/SSJ/";
-            const PATREON_OAUTH_URL = `https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=identity%20identity.memberships`;
+      document.addEventListener("DOMContentLoaded", function () {
+        // Patreon login/logout
+        const CLIENT_ID =
+          "DCmpYjAt5oF-1poN2N_hW22VXTuz8BNIOPk1yeoctffuvobAJCu8I7N7fKc1ngMp";
+        const REDIRECT_URI = "https://benis-boy.github.io/SSJ/";
+        const PATREON_OAUTH_URL = `https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=identity%20identity.memberships`;
 
-            const patreonLoginButton = document.getElementById('patreon-login');
-            const patreonLogoutButton = document.getElementById('patreon-logout');
-            const patreonUsernameSpan = document.getElementById('patreon-username');
+        const patreonLoginButton = document.getElementById("patreon-login");
+        const patreonLogoutButton = document.getElementById("patreon-logout");
+        const patreonUsernameSpan = document.getElementById("patreon-username");
 
-            patreonLoginButton.addEventListener('click', function () {
-                window.location.href = PATREON_OAUTH_URL;
-            });
+        patreonLoginButton.addEventListener("click", function () {
+          window.location.href = PATREON_OAUTH_URL;
+        });
 
-            function showPatreonUser(username) {
-                patreonLoginButton.style.display = 'none';
-                patreonLogoutButton.style.display = 'block';
-                patreonUsernameSpan.textContent = `Logged in as ${username}`;
-                patreonUsernameSpan.style.display = 'block';
+        function showPatreonUser(username) {
+          patreonLoginButton.style.display = "none";
+          patreonLogoutButton.style.display = "block";
+          patreonUsernameSpan.textContent = `Logged in as ${username}`;
+          patreonUsernameSpan.style.display = "block";
+        }
+
+        async function checkPatreonAuthentication() {
+          const token = JSON.parse(localStorage.getItem("patreon_token"));
+
+          if (!token) {
+            patreonLoginButton.style.display = "block";
+            patreonLogoutButton.style.display = "none";
+            patreonUsernameSpan.style.display = "none";
+            return;
+          }
+
+          const username = token?.userInfo?.userName;
+          if (username) showPatreonUser(username);
+
+          window.SUPPORTER = token?.userInfo?.supportsMe;
+          window.ENCRYPTION_PASSWORD = token?.encryption_password;
+        }
+        patreonLogoutButton.addEventListener("click", () => {
+          localStorage.removeItem("patreon_token");
+          window.SUPPORTER = false;
+          window.ENCRYPTION_PASSWORD = "NO_PASSWORD";
+          checkPatreonAuthentication();
+        });
+
+        const url = new URL(window.location);
+        const urlParams = new URLSearchParams(url.search);
+        const authCode = urlParams.get("code");
+        if (authCode) handlePatreonAuth({ code: authCode });
+
+        async function handlePatreonAuth(auth) {
+          const response = await fetch(
+            "https://mellow-kitsune-6578b2.netlify.app/.netlify/functions/patreon-oauth",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(auth),
             }
-
-            async function checkPatreonAuthentication() {
-                const token = JSON.parse(localStorage.getItem('patreon_token'));
-
-                if (!token) {
-                    patreonLoginButton.style.display = 'block';
-                    patreonLogoutButton.style.display = 'none';
-                    patreonUsernameSpan.style.display = 'none';
-                    return;
-                }
-
-                const username = token?.userInfo?.userName;
-                if (username) showPatreonUser(username);
-
-                window.SUPPORTER = token?.userInfo?.supportsMe;
-                window.ENCRYPTION_PASSWORD = token?.encryption_password;
-            }
-            patreonLogoutButton.addEventListener('click', () => {
-                localStorage.removeItem('patreon_token');
-                window.SUPPORTER = false;
-                window.ENCRYPTION_PASSWORD = "NO_PASSWORD";
-                checkPatreonAuthentication();
-            });
-
-            const url = new URL(window.location);
-            const urlParams = new URLSearchParams(url.search);
-            const authCode = urlParams.get('code');
-            if (authCode) handlePatreonAuth({ code: authCode });
-
-            async function handlePatreonAuth(auth) {
-                const response = await fetch('https://mellow-kitsune-6578b2.netlify.app/.netlify/functions/patreon-oauth', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(auth),
-                });
-                const data = await response.json();
-                if (data) {
-                    localStorage.setItem("patreon_token", JSON.stringify(data));
-                    checkPatreonAuthentication();
-                } else {
-                    console.error('Error:', data);
-                }
-                urlParams.delete("code");
-                urlParams.delete("state");
-                window.history.replaceState({}, document.title, `${url.pathname}?${urlParams.toString()}`);
-            }
-
+          );
+          const data = await response.json();
+          if (data) {
+            localStorage.setItem("patreon_token", JSON.stringify(data));
             checkPatreonAuthentication();
+          } else {
+            console.error("Error:", data);
+          }
+          urlParams.delete("code");
+          urlParams.delete("state");
+          window.history.replaceState(
+            {},
+            document.title,
+            `${url.pathname}?${urlParams.toString()}`
+          );
+        }
 
-            const _token = JSON.parse(localStorage.getItem('patreon_token'));
-            window.addEventListener("load", function () {
-                if (_token?.refresh_token) {
-                    handlePatreonAuth({ refresh_token: _token.refresh_token });
-                }
-            });
+        checkPatreonAuthentication();
+
+        const _token = JSON.parse(localStorage.getItem("patreon_token"));
+        window.addEventListener("load", function () {
+          if (_token?.refresh_token) {
+            handlePatreonAuth({ refresh_token: _token.refresh_token });
+          }
         });
+      });
     </script>
     <script>
-        function changeBook(bookId, bookTitle) {
-            // Set localStorage variable
-            localStorage.setItem('SELECTED_BOOK', bookId);
+      function changeBook(bookId, bookTitle) {
+        // Set localStorage variable
+        localStorage.setItem("SELECTED_BOOK", bookId);
 
-            // Set window variable
-            window.SELECTED_BOOK = bookId;
+        // Set window variable
+        window.SELECTED_BOOK = bookId;
 
-            // Load navigation
-            loadNavigation(bookId + '_navigation.html');
-            document.getElementById("bookTitle").textContent = bookTitle;
-            document.getElementById("pageTitle").textContent = bookTitle;
-        }
+        // Load navigation
+        loadNavigation(bookId + "_navigation.html");
+        document.getElementById("bookTitle").textContent = bookTitle;
+        document.getElementById("pageTitle").textContent = bookTitle;
+      }
     </script>
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="header-bar">
-        <button id="toggleNav">☰</button>
-        <button id="home-button" onclick="loadContent('homepage.html');" style="margin-left: 10px; margin-right: 10px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 9l9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"></path>
-                <path d="M9 22V12h6v10"></path>
-            </svg>
-        </button>
-		<button id="patreon-link" onclick="window.open('https://patreon.com/BenisBoy16', '_blank');" style="margin-left: 10px; margin-right: 10px; padding: 2px;">
-			<img src="pfp_patreon.png" alt="Patreon" width="36" height="36" style="vertical-align: middle;">
-		</button>
-        <h1 id="bookTitle">Pokemon - Solo's Strange Journey</h1>
-        <div id="patreon-section">
-            <button id="patreon-login">Login with Patreon</button>
-            <span id="patreon-username" style="display: none;"></span>
-            <button id="patreon-logout" style="display: none;">Logout</button>
-        </div>
+      <button id="toggleNav">☰</button>
+      <button
+        id="home-button"
+        onclick="loadContent('homepage.html');"
+        style="margin-left: 10px; margin-right: 10px"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M3 9l9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"></path>
+          <path d="M9 22V12h6v10"></path>
+        </svg>
+      </button>
+      <button
+        id="patreon-link"
+        onclick="window.open('https://patreon.com/BenisBoy16', '_blank');"
+        style="margin-left: 10px; margin-right: 10px; padding: 2px"
+      >
+        <img
+          src="pfp_patreon.png"
+          alt="Patreon"
+          width="36"
+          height="36"
+          style="vertical-align: middle"
+        />
+      </button>
+      <h1 id="bookTitle">
+        HEY! I see you got past my sophisticated automatic reroute to
+        <a href="https://benis-boy.github.io/library/">THIS</a> is the new URL.
+      </h1>
+      <div id="patreon-section">
+        <button id="patreon-login">Login with Patreon</button>
+        <span id="patreon-username" style="display: none"></span>
+        <button id="patreon-logout" style="display: none">Logout</button>
+      </div>
     </div>
 
     <div id="book">
-        <ul id="navigation" class="show" style="z-index: 9999;">
-
-        </ul>
-        <div id="content">
-		
-        </div>
+      <ul id="navigation" class="show" style="z-index: 9999"></ul>
+      <div id="content"></div>
     </div>
-</body>
-
+  </body>
 </html>
